@@ -6,12 +6,12 @@ import { NavLink } from "react-router-dom";
 
 export default function Nav() {
   return (
-    <nav class="nav justify-content-center">
+    <nav className="nav justify-content-center">
       <NavLink to="/">
-        <a class="nav-link active">Accueil</a>
+        <a className="nav-link active">Accueil</a>
       </NavLink>
       <NavLink to="/Projets">
-        <a class="nav-link active">Projets</a>
+        <a className="nav-link active">Projets</a>
       </NavLink>
     </nav>
   );
