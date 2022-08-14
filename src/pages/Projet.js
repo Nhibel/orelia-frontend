@@ -10,9 +10,8 @@ export default function Projet() {
   const [projet, setProjet] = useState(monProjet);
 
   useEffect(() => {
-    axios.get(`/projets/projet/${slug}`).then((res) => {
+    axios.get(`/projets/${slug}`).then((res) => {
       setProjet(res.data.data);
-      console.log(res.data.data);
     });
   }, []);
 
@@ -22,7 +21,7 @@ export default function Projet() {
       {projet.images &&
         projet.images.map((image) => (
           <div key={image.idImage} style={{ listStyleType: "none" }}>
-            <p>{image.idImage}</p>
+            <p>{image.projetsId}</p>
           </div>
         ))}
       <div dangerouslySetInnerHTML={{ __html: projet.richText }} />
