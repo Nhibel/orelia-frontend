@@ -11,29 +11,20 @@ export default function ProjetAdmin() {
   const editorRef = useRef(null);
 
   const [projet, setProjet] = useState(monProjet);
-
-  const [images, setImages] = useState([]);
-  const [imageURLs, setImageURLs] = useState([]);
+  const [tests, setTests] = useState([]);
 
   useEffect(() => {
-    if (images.length < 1) {
-      return;
-    }
-    const newImageUrls = [];
-    images.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
-    setImageURLs(newImageUrls);
     axios.get(`/projets/${slug}`).then((res) => {
       setProjet(res.data.data);
     });
-  }, [images]);
 
-  // Callback~
-  const onImageChange = (e) => {
-    setImages([...e.target.files]);
-    console.log(e.target.files);
-  };
+    axios.get("/gerer-images/files").then((res) => {
+      setTests(res.data);
+    });
+  }, []);
 
   const saveText = (richText) => {
+    console.log(authHeader());
     const projetModif = projet;
     projetModif.richText = richText;
     axios
@@ -49,10 +40,9 @@ export default function ProjetAdmin() {
 
   return (
     <>
-      <input type="file" multiple accept="image/*" onChange={onImageChange} />
-      {imageURLs.map((imageSrc) => (
-        <img src={imageSrc} />
-      ))}
+      <div className="list-group">
+        {tests && tests.map((test) => <img src={test.url} />)}
+      </div>
 
       <Editor
         apiKey="9pnpqm0jtajw64w1slmwlb8dtx6lytstsn55qcxwzy191hkr"

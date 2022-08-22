@@ -13,15 +13,15 @@ export default function Projets() {
     });
   }, []);
 
-  const navigateToProject = (number) => {
-    navigate(`/projets/${number}`);
+  const navigateToProject = (number, projet) => {
+    navigate(`/projets/${number}`, { state: projet });
   };
 
   return (
     <>
       {projets.map((projet) => (
         <div key={projet.id} style={{ listStyleType: "none" }}>
-          <Button onClick={() => navigateToProject(projet.id)}>
+          <Button onClick={() => navigateToProject(projet.id, projet)}>
             {projet.title}
           </Button>
         </div>
