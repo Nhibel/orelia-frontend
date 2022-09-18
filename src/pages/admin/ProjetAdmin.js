@@ -57,11 +57,19 @@ export default function ProjetAdmin() {
     }));
   };
 
-  const handleImageSelect = (idImage) => {
-    setProjet((projet) => ({
-      ...projet,
-      idImageThumbnail: idImage,
-    }));
+  const handleImageSelect = async (idImage) => {
+    await axios
+      .put(
+        `http://localhost:8080/projets/${projet.id}/image-en-valeur/${idImage}`,
+        projet,
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((res) => {
+        setProjet(res.data.data);
+      });
+    reLoadProjet();
   };
 
   const handleSubmit = (e) => {
@@ -162,76 +170,77 @@ export default function ProjetAdmin() {
                 }}
               />
             </Form.Group>
+            <Button variant="primary" type="submit" className="mt-3">
+              Submit
+            </Button>
           </Col>
+
           <Col
             xs={1}
             md={6}
             className="g-4 d-flex flex-row flex-wrap overflow-auto"
-            style={{ height: "500px" }}
             key={key}
           >
-            {[...projet.images]
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((image, index) => (
-                <Col xs={12} md={4} className="p-2" key={index}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src={image.thumbUrl}
-                      style={{
-                        maxHeight: "150px",
-                        maxWidth: "100%",
-                        objectFit: "cover",
-                        objectPosition: "50% 40%",
-                      }}
-                    />
-                    <Card.Body>
-                      <Card.Title
+            <Row>
+              {[...projet.images]
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((image, index) => (
+                  <Col xs={12} md={4} className="p-2" key={index}>
+                    <Card>
+                      <Card.Img
+                        variant="top"
+                        src={image.thumbUrl}
                         style={{
-                          textOverflow: "ellipsis",
-                          width: "100%",
-                          display: "block",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
+                          maxHeight: "150px",
+                          maxWidth: "100%",
+                          objectFit: "cover",
+                          objectPosition: "50% 40%",
                         }}
-                      >
-                        {image.name.substring(0, image.name.lastIndexOf("."))}
-                      </Card.Title>
-                      <Button
-                        onClick={() => handleImageSelect(image.idImage)}
-                        variant={
-                          image.idImage == projet.idImageThumbnail
-                            ? "success"
-                            : "primary"
-                        }
-                        size="sm"
-                        style={{ marginRight: "5px" }}
-                      >
-                        {image.idImage == projet.idImageThumbnail
-                          ? "En valeur"
-                          : "Mettre en valeur"}
-                      </Button>
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => handleRemoveImage(image.idImage)}
-                      >
-                        Retirer
-                      </Button>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
+                      />
+                      <Card.Body>
+                        <Card.Title
+                          style={{
+                            textOverflow: "ellipsis",
+                            width: "100%",
+                            display: "block",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {image.name.substring(0, image.name.lastIndexOf("."))}
+                        </Card.Title>
+                        <Button
+                          onClick={() => handleImageSelect(image.idImage)}
+                          variant={
+                            image.idImage == projet.idImageThumbnail
+                              ? "success"
+                              : "primary"
+                          }
+                          size="sm"
+                          style={{ marginRight: "5px" }}
+                        >
+                          {image.idImage == projet.idImageThumbnail
+                            ? "En valeur"
+                            : "Mettre en valeur"}
+                        </Button>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleRemoveImage(image.idImage)}
+                        >
+                          Retirer
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+            </Row>
           </Col>
         </Row>
 
         <Row>
           <Col xs="12" md="6"></Col>
         </Row>
-
-        <Button variant="primary" type="submit" className="mt-3">
-          Submit
-        </Button>
       </Form>
     </>
   );

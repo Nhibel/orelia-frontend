@@ -17,9 +17,9 @@ export default function ModalAjouterImage({
 
   useEffect(() => {
     const fetchPictures = async () => {
-      const pictures = await axios.get("/images/");
-      console.log(pictures.data);
-      setGallery(pictures.data);
+      const pictures = await axios.get("/images/get-all");
+      console.log(pictures.data.data);
+      setGallery(pictures.data.data);
       setLoading(false);
     };
     fetchPictures();
@@ -66,7 +66,7 @@ export default function ModalAjouterImage({
         <Form>
           <div className="d-flex flex-row flex-wrap justify-content-around">
             {gallery.map((image, index) => {
-              if (image.idsProjets != idProjet) {
+              if (image.projetsId != idProjet) {
                 return (
                   <div key={index} className="p-2">
                     <Form.Check
