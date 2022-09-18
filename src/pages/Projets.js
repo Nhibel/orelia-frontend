@@ -21,9 +21,18 @@ export default function Projets() {
     <>
       {projets.map((projet) => (
         <div key={projet.id} style={{ listStyleType: "none" }}>
-          <Button onClick={() => navigateToProject(projet.id, projet)}>
-            {projet.title}
-          </Button>
+          {projet.images.map(
+            (image) =>
+              image.idImage === projet.idImageThumbnail && (
+                <div
+                  onClick={() => navigateToProject(projet.id, projet)}
+                  className="mt-3"
+                >
+                  <img src={image.thumbUrl} style={{ height: "350px" }}></img>
+                  <h2>{projet.title}</h2>
+                </div>
+              )
+          )}
         </div>
       ))}
     </>

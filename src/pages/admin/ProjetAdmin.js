@@ -1,92 +1,238 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Component } from "react";
 import axios from "axios";
-import { ProjetModel } from "../../models/ProjetModel";
-import { Editor } from "@tinymce/tinymce-react";
 import authHeader from "../../services/auth-header";
 import { useParams } from "react-router-dom";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import ModalAjouterImage from "../../Components/ModalAjouterImage";
+import ModalRetirerImage from "../../Components/ModalRetirerImages";
+import { Card } from "react-bootstrap";
 
 export default function ProjetAdmin() {
   const { slug } = useParams();
-  const monProjet = new ProjetModel();
-  const editorRef = useRef(null);
 
-  const [projet, setProjet] = useState(monProjet);
-  const [tests, setTests] = useState([]);
+  const [projet, setProjet] = useState();
+  const [title, setTitle] = useState();
+  const [isLoading, setLoading] = useState(true);
+
+  // Permet de mettre à jour la sélection d'image
+  const [key, setKey] = useState(new Date());
+
+  const [openModalAjoutImage, setOpenModalAjoutImage] = useState(false);
+  const [openModalRetirerImage, setOpenModalRetirerImage] = useState(false);
 
   useEffect(() => {
-    axios.get(`/projets/${slug}`).then((res) => {
-      setProjet(res.data.data);
-    });
-
-    axios.get("/gerer-images/files").then((res) => {
-      setTests(res.data);
-    });
+    loadProjet();
   }, []);
 
-  const saveText = (richText) => {
-    console.log(authHeader());
-    const projetModif = projet;
-    projetModif.richText = richText;
+  const loadProjet = () => {
+    axios.get(`/projets/${slug}`).then((res) => {
+      setProjet(res.data.data);
+      console.log("projet : ", res.data.data);
+      setTitle(res.data.data.title);
+      setLoading(false);
+    });
+  };
+
+  const reLoadProjet = async () => {
+    await axios.get(`/projets/${slug}`).then((res) => {
+      setProjet(res.data.data);
+    });
+    setKey(new Date());
+  };
+
+  const handleTitleChange = (e) => {
+    setProjet((projet) => ({
+      ...projet,
+      title: e.target.value,
+    }));
+  };
+
+  const handleContentChange = (e) => {
+    setProjet((projet) => ({
+      ...projet,
+      richText: e.target.value,
+    }));
+  };
+
+  const handleImageSelect = (idImage) => {
+    setProjet((projet) => ({
+      ...projet,
+      idImageThumbnail: idImage,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     axios
-      .put(`http://localhost:8080/projets/`, projetModif, {
+      .put(`http://localhost:8080/projets/`, projet, {
         headers: authHeader(),
       })
       .then((res) => {
         setProjet(res.data.data);
-        console.log(res);
-        console.log("res.data : ", res.data);
       });
   };
 
+  const handleRemoveImage = async (idImage) => {
+    let newArr = [idImage];
+    await axios.put(
+      `http://localhost:8080/projets/${projet.id}/remove/images`,
+      newArr,
+      {
+        headers: authHeader(),
+      }
+    );
+    reLoadProjet();
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
-      <div className="list-group">
-        {tests && tests.map((test) => <img src={test.url} />)}
-      </div>
+      <h2 className="mt-2 mb-4">Modifier le projet {title}</h2>
 
-      <Editor
-        apiKey="9pnpqm0jtajw64w1slmwlb8dtx6lytstsn55qcxwzy191hkr"
-        onInit={(evt, editor) => (editorRef.current = editor)}
-        initialValue={
-          projet.richText
-            ? projet.richText
-            : "<p>This is the initial content of the editor.</p>"
-        }
-        init={{
-          height: 500,
-          menubar: false,
-          plugins: [
-            "advlist",
-            "autolink",
-            "lists",
-            "link",
-            "image",
-            "charmap",
-            "preview",
-            "anchor",
-            "searchreplace",
-            "visualblocks",
-            "code",
-            "fullscreen",
-            "insertdatetime",
-            "media",
-            "table",
-            "code",
-            "help",
-            "wordcount",
-          ],
-          toolbar:
-            "undo redo | blocks | " +
-            "bold italic forecolor | alignleft aligncenter " +
-            "alignright alignjustify | bullist numlist outdent indent | " +
-            "removeformat | help",
-          content_style:
-            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+      <Button
+        onClick={() => {
+          setOpenModalAjoutImage(true);
         }}
-      />
-      <button onClick={() => saveText(editorRef.current.getContent())}>
-        Log editor content
-      </button>
+        style={{ marginRight: "10px" }}
+      >
+        Ajouter Images
+      </Button>
+      {openModalAjoutImage && (
+        <ModalAjouterImage
+          closeModal={setOpenModalAjoutImage}
+          show={openModalAjoutImage}
+          idProjet={projet.id}
+          reloadImagesFunc={reLoadProjet}
+          projetImages={projet.images}
+        />
+      )}
+
+      <Button
+        onClick={() => {
+          setOpenModalRetirerImage(true);
+        }}
+      >
+        Retirer Images
+      </Button>
+      {openModalRetirerImage && (
+        <ModalRetirerImage
+          closeModal={setOpenModalRetirerImage}
+          show={openModalRetirerImage}
+          idProjet={projet.id}
+          reloadImagesFunc={reLoadProjet}
+          projetImages={projet.images}
+        />
+      )}
+
+      <Form
+        onSubmit={(e) => {
+          handleSubmit(e);
+        }}
+      >
+        <Row>
+          <Col xs="12" md="6">
+            <Form.Group className="mb-3 mt-3">
+              <Form.Label>Titre du projet :</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Indiquer le titre du projet"
+                value={projet.title}
+                required
+                onChange={(e) => {
+                  handleTitleChange(e);
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group className="mt-3">
+              <Form.Label>Descriptif du projet :</Form.Label>
+              <Form.Control
+                rows={8}
+                as="textarea"
+                placeholder="Indiquer le descriptif du projet"
+                value={projet.richText}
+                onChange={(e) => {
+                  handleContentChange(e);
+                }}
+              />
+            </Form.Group>
+          </Col>
+          <Col
+            xs={1}
+            md={6}
+            className="g-4 d-flex flex-row flex-wrap overflow-auto"
+            style={{ height: "500px" }}
+            key={key}
+          >
+            {[...projet.images]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((image, index) => (
+                <Col xs={12} md={4} className="p-2" key={index}>
+                  <Card>
+                    <Card.Img
+                      variant="top"
+                      src={image.thumbUrl}
+                      style={{
+                        maxHeight: "150px",
+                        maxWidth: "100%",
+                        objectFit: "cover",
+                        objectPosition: "50% 40%",
+                      }}
+                    />
+                    <Card.Body>
+                      <Card.Title
+                        style={{
+                          textOverflow: "ellipsis",
+                          width: "100%",
+                          display: "block",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {image.name.substring(0, image.name.lastIndexOf("."))}
+                      </Card.Title>
+                      <Button
+                        onClick={() => handleImageSelect(image.idImage)}
+                        variant={
+                          image.idImage == projet.idImageThumbnail
+                            ? "success"
+                            : "primary"
+                        }
+                        size="sm"
+                        style={{ marginRight: "5px" }}
+                      >
+                        {image.idImage == projet.idImageThumbnail
+                          ? "En valeur"
+                          : "Mettre en valeur"}
+                      </Button>
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => handleRemoveImage(image.idImage)}
+                      >
+                        Retirer
+                      </Button>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xs="12" md="6"></Col>
+        </Row>
+
+        <Button variant="primary" type="submit" className="mt-3">
+          Submit
+        </Button>
+      </Form>
     </>
   );
 }

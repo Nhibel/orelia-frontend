@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ProjetModel } from "../models/ProjetModel";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
@@ -29,15 +28,17 @@ export default function Projet() {
 
   return (
     <>
-      <p className="h1">{projet.title}</p>
-      {projet.images &&
-        projet.images.map((image) => (
-          <div key={image.idImage} style={{ listStyleType: "none" }}>
-            <p>{image.projetsId}</p>
-            <img src={image.location} alt="" />
-          </div>
-        ))}
-      <div dangerouslySetInnerHTML={{ __html: projet.richText }} />
+      <h1 className="mt-3">{projet.title}</h1>
+      <p>{projet.richText}</p>
+
+      <div className="d-flex justify-content-around">
+        {projet.images &&
+          projet.images.map((image, index) => (
+            <div key={image.idImage} style={{ listStyleType: "none" }}>
+              <img src={image.thumbUrl} alt="" style={{ maxHeight: "350px" }} />
+            </div>
+          ))}
+      </div>
     </>
   );
 }

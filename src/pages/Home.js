@@ -1,17 +1,76 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
+import { Fade } from "react-slideshow-image";
+import "react-slideshow-image/dist/styles.css";
+import http from "../http-commons";
 
 export default function Home() {
+  const [article, setArticle] = useState();
+  const [isLoading, setLoading] = useState(true);
+  const [gallery, setGallery] = useState([]);
+
+  useEffect(() => {
+    const getArticles = async () => {
+      const result = await axios.get("/articles/section/home");
+      setArticle(result.data.data);
+    };
+    if (!article) {
+      getArticles();
+    } else if (article) {
+      const getGallery = article.images.map((image) => {
+        return image.url;
+      });
+
+      setGallery(getGallery);
+      setLoading(false);
+    }
+  }, [article]);
+
+  if (isLoading) {
+    return <div></div>;
+  }
+
+  const fadeProperties = {
+    duration: 5000,
+    transitionDuration: 2000,
+    infinite: true,
+    indicators: false,
+    scale: 0,
+    arrows: false,
+    pauseOnHover: false,
+    canSwipe: false,
+  };
+
   return (
     <>
-      <p className="h1">Bienvenue sur l'accueil</p>
-      <NavLink
-        to={{
-          pathname: "/Projets",
+      <div
+        style={{
+          marginTop: "-121px",
+          overflow: "hidden",
+          marginLeft: "-0.75rem",
+          marginRight: "-0.75rem",
+          overflow: "hidden",
+          zIndex: 0,
         }}
       >
-        Aller à la section Projets
-      </NavLink>
+        <Fade {...fadeProperties}>
+          {gallery.map((image, index) => (
+            <div key={index}>
+              <img
+                src={image}
+                style={{
+                  width: "100%",
+                  height: "100vh",
+                  objectFit: "cover",
+                  objectPosition: "50% 10%",
+                }}
+              />
+            </div>
+          ))}
+        </Fade>
+      </div>
     </>
   );
 }

@@ -11,3 +11,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.principal-navlink a{
+  color: black!important;
+}
+
+.nav-link:hover {
+  color: #f69100!important;
+  text-shadow: 1px 1px 2px black;
+}
+
+.contact-icon {
+  height:18px;
+  margin-top: -5px;
+}
+
+.contact-navlink {
+  height:30px;
+}
+
+.contact-navlink img {
+  padding-right: 0px;
+}
+
+.call-me {
+  padding-left:0!important;
+  color:grey!important
+}
+
+.splash-logo {
+  position:absolute;
+  z-index: 999999;
+}

@@ -18,24 +18,37 @@ export default function ProjetsAdmin() {
     }
   }, []);
 
-  const navigateToProject = (number) => {
-    navigate(`/projetAdmin/${number}`);
+  const navigateToProject = (number, projet) => {
+    navigate(`/projetAdmin/${number}`, { state: projet });
+  };
+
+  const navigateToImages = () => {
+    navigate(`/admin/images`);
   };
 
   return (
     <>
       {showPage ? (
-        <div className="list-group">
-          {projets.map((projet) => (
-            <button
-              onClick={() => navigateToProject(projet.id)}
-              type="button"
-              className="list-group-item list-group-item-action"
-              key={projet.id}
-            >
-              {projet.title}
-            </button>
-          ))}
+        <div>
+          <button
+            onClick={() => navigateToImages()}
+            type="button"
+            className="mb-3"
+          >
+            Images
+          </button>
+          <div className="list-group">
+            {projets.map((projet) => (
+              <button
+                onClick={() => navigateToProject(projet.id, projet)}
+                type="button"
+                className="list-group-item list-group-item-action"
+                key={projet.id}
+              >
+                {projet.title}
+              </button>
+            ))}
+          </div>
         </div>
       ) : (
         <div className="d-flex align-items-center flex-column">
