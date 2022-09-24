@@ -31,15 +31,12 @@ export default function ModalAjouterImage({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put(
-      `http://localhost:8080/projets/${idProjet}/images`,
-      imagesSelected,
-      {
+    await axios
+      .put(`http://localhost:8080/projets/${idProjet}/images`, imagesSelected, {
         headers: authHeader(),
-      }
-    );
+      })
+      .then(closeModal(false));
     reloadImagesFunc();
-    closeModal(false);
   };
 
   const handleImageSelect = (e) => {

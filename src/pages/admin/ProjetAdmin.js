@@ -9,6 +9,7 @@ import Col from "react-bootstrap/Col";
 import ModalAjouterImage from "../../Components/ModalAjouterImage";
 import ModalRetirerImage from "../../Components/ModalRetirerImages";
 import { Card } from "react-bootstrap";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ProjetAdmin() {
   const { slug } = useParams();
@@ -68,6 +69,12 @@ export default function ProjetAdmin() {
       )
       .then((res) => {
         setProjet(res.data.data);
+        toast.success("Image mise en valeur avec succès !");
+      })
+      .catch(function (error) {
+        if (error.response) {
+          toast.error("Erreur lors du changement d'image en valeur");
+        }
       });
     reLoadProjet();
   };
@@ -79,7 +86,13 @@ export default function ProjetAdmin() {
         headers: authHeader(),
       })
       .then((res) => {
+        toast.success("Projet mis à jour avec succès !");
         setProjet(res.data.data);
+      })
+      .catch(function (error) {
+        if (error.response) {
+          toast.error("Erreur lors de la mise à jour du projet");
+        }
       });
   };
 
@@ -101,6 +114,7 @@ export default function ProjetAdmin() {
 
   return (
     <>
+      <Toaster position="top-right" reverseOrder={false} />
       <h2 className="mt-2 mb-4">Modifier le projet {title}</h2>
 
       <Button
@@ -146,7 +160,9 @@ export default function ProjetAdmin() {
         <Row>
           <Col xs="12" md="6">
             <Form.Group className="mb-3 mt-3">
-              <Form.Label>Titre du projet :</Form.Label>
+              <Form.Label>
+                <h5>Titre du projet :</h5>
+              </Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Indiquer le titre du projet"
@@ -159,7 +175,9 @@ export default function ProjetAdmin() {
             </Form.Group>
 
             <Form.Group className="mt-3">
-              <Form.Label>Descriptif du projet :</Form.Label>
+              <Form.Label>
+                <h5>Descriptif du projet :</h5>
+              </Form.Label>
               <Form.Control
                 rows={8}
                 as="textarea"
@@ -178,21 +196,24 @@ export default function ProjetAdmin() {
           <Col
             xs={1}
             md={6}
-            className="g-4 d-flex flex-row flex-wrap overflow-auto"
+            className="g-2 pt-2 d-flex flex-row flex-wrap overflow-auto"
             key={key}
           >
+            <Row>
+              <h5>Images du projet</h5>
+            </Row>
             <Row>
               {[...projet.images]
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((image, index) => (
-                  <Col xs={12} md={4} className="p-2" key={index}>
-                    <Card>
+                  <Col xs={12} md={3} className="p-2" key={index}>
+                    <Card style={{ width: "220px" }}>
                       <Card.Img
                         variant="top"
                         src={image.thumbUrl}
                         style={{
-                          maxHeight: "150px",
-                          maxWidth: "100%",
+                          maxHeight: "220px",
+                          maxWidth: "220px",
                           objectFit: "cover",
                           objectPosition: "50% 40%",
                         }}
@@ -201,22 +222,23 @@ export default function ProjetAdmin() {
                         <Card.Title
                           style={{
                             textOverflow: "ellipsis",
-                            width: "100%",
+                            width: "200px",
                             display: "block",
                             whiteSpace: "nowrap",
                             overflow: "hidden",
+                            fontSize: "18px",
                           }}
                         >
                           {image.name.substring(0, image.name.lastIndexOf("."))}
                         </Card.Title>
                         <Button
+                          size="sm"
                           onClick={() => handleImageSelect(image.idImage)}
                           variant={
                             image.idImage == projet.idImageThumbnail
                               ? "success"
                               : "primary"
                           }
-                          size="sm"
                           style={{ marginRight: "5px" }}
                         >
                           {image.idImage == projet.idImageThumbnail
@@ -224,8 +246,8 @@ export default function ProjetAdmin() {
                             : "Mettre en valeur"}
                         </Button>
                         <Button
-                          variant="danger"
                           size="sm"
+                          variant="danger"
                           onClick={() => handleRemoveImage(image.idImage)}
                         >
                           Retirer

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
+import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 
 export default function ProjetsAdmin() {
   const [projets, setProjets] = useState([]);
@@ -29,26 +30,44 @@ export default function ProjetsAdmin() {
   return (
     <>
       {showPage ? (
-        <div>
-          <button
-            onClick={() => navigateToImages()}
-            type="button"
-            className="mb-3"
-          >
-            Images
-          </button>
-          <div className="list-group">
-            {projets.map((projet) => (
-              <button
-                onClick={() => navigateToProject(projet.id, projet)}
-                type="button"
-                className="list-group-item list-group-item-action"
-                key={projet.id}
-              >
-                {projet.title}
-              </button>
-            ))}
+        <div className="mt-3">
+          <div className="mb-3 d-flex justify-content-evenly">
+            <Button onClick={() => navigateToImages()} type="button">
+              Ajouter un projet
+            </Button>
+            <Button onClick={() => navigateToImages()} type="button">
+              Ajouter un article
+            </Button>
+            <Button onClick={() => navigateToImages()} type="button">
+              Gestion des images
+            </Button>
           </div>
+
+          <Row>
+            <Col>
+              <Card>
+                <Card.Header>liste des articles</Card.Header>
+                <ListGroup variant="flush"></ListGroup>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <Card.Header>liste des projets</Card.Header>
+                <ListGroup variant="flush">
+                  {projets.map((projet) => (
+                    <ListGroup.Item
+                      onClick={() => navigateToProject(projet.id, projet)}
+                      type="button"
+                      className="list-group-item-action"
+                      key={projet.id}
+                    >
+                      {projet.title}
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </Card>
+            </Col>
+          </Row>
         </div>
       ) : (
         <div className="d-flex align-items-center flex-column">
