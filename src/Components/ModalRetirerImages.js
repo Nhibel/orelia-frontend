@@ -3,7 +3,8 @@ import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-import authHeader from "../services/auth-header";
+//import authHeader from "../services/auth-header";
+import api from "../services/api";
 
 export default function ModalRetirerImage({
   closeModal,
@@ -16,12 +17,9 @@ export default function ModalRetirerImage({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put(
+    await api.put(
       `http://localhost:8080/projets/${idProjet}/remove/images`,
-      imagesSelected,
-      {
-        headers: authHeader(),
-      }
+      imagesSelected
     );
     reloadImagesFunc();
     closeModal(false);

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, Component } from "react";
 import axios from "axios";
-import authHeader from "../../services/auth-header";
+//import authHeader from "../services/auth-header";
+import api from "../../services/api";
 import { useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -10,6 +11,7 @@ import ModalAjouterImage from "../../Components/ModalAjouterImage";
 import ModalRetirerImage from "../../Components/ModalRetirerImages";
 import { Card } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
+import ProjetService from "../../services/projet.service";
 
 export default function ProjetAdmin() {
   const { slug } = useParams();
@@ -29,7 +31,7 @@ export default function ProjetAdmin() {
   }, []);
 
   const loadProjet = () => {
-    axios.get(`/projets/${slug}`).then((res) => {
+    ProjetService.getProjetById(slug).then((res) => {
       setProjet(res.data.data);
       console.log("projet : ", res.data.data);
       setTitle(res.data.data.title);
@@ -38,7 +40,7 @@ export default function ProjetAdmin() {
   };
 
   const reLoadProjet = async () => {
-    await axios.get(`/projets/${slug}`).then((res) => {
+    await ProjetService.getProjetById(slug).then((res) => {
       setProjet(res.data.data);
     });
     setKey(new Date());
@@ -59,14 +61,7 @@ export default function ProjetAdmin() {
   };
 
   const handleImageSelect = async (idImage) => {
-    await axios
-      .put(
-        `http://localhost:8080/projets/${projet.id}/image-en-valeur/${idImage}`,
-        projet,
-        {
-          headers: authHeader(),
-        }
-      )
+    await ProjetService.gererImageEnValeur(projet.id, idImage, projet)
       .then((res) => {
         setProjet(res.data.data);
         toast.success("Image mise en valeur avec succès !");
@@ -81,10 +76,7 @@ export default function ProjetAdmin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .put(`http://localhost:8080/projets/`, projet, {
-        headers: authHeader(),
-      })
+    ProjetService.updateProjet(projet)
       .then((res) => {
         toast.success("Projet mis à jour avec succès !");
         setProjet(res.data.data);
@@ -98,13 +90,7 @@ export default function ProjetAdmin() {
 
   const handleRemoveImage = async (idImage) => {
     let newArr = [idImage];
-    await axios.put(
-      `http://localhost:8080/projets/${projet.id}/remove/images`,
-      newArr,
-      {
-        headers: authHeader(),
-      }
-    );
+    await ProjetService.removeImageProjet(projet.id, newArr);
     reLoadProjet();
   };
 

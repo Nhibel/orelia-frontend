@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
+import ProjetService from "../../services/projet.service";
 
 export default function ProjetsAdmin() {
   const [projets, setProjets] = useState([]);
@@ -13,7 +14,7 @@ export default function ProjetsAdmin() {
     const user = AuthService.getCurrentUser();
     if (user != null) {
       setShowPage(true);
-      axios.get(`/projets/all`).then((res) => {
+      ProjetService.getProjets().then((res) => {
         setProjets(res.data.data);
       });
     }

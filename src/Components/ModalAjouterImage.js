@@ -3,7 +3,8 @@ import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-import authHeader from "../services/auth-header";
+//import authHeader from "../services/auth-header";
+import api from "../services/api";
 
 export default function ModalAjouterImage({
   closeModal,
@@ -17,7 +18,7 @@ export default function ModalAjouterImage({
 
   useEffect(() => {
     const fetchPictures = async () => {
-      const pictures = await axios.get("/images/get-all");
+      const pictures = await api.get("/images/get-all");
       console.log(pictures.data.data);
       setGallery(pictures.data.data);
       setLoading(false);
@@ -31,10 +32,8 @@ export default function ModalAjouterImage({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios
-      .put(`http://localhost:8080/projets/${idProjet}/images`, imagesSelected, {
-        headers: authHeader(),
-      })
+    await api
+      .put(`http://localhost:8080/projets/${idProjet}/images`, imagesSelected)
       .then(closeModal(false));
     reloadImagesFunc();
   };

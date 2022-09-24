@@ -1,19 +1,20 @@
 import http from "../http-commons";
-import authHeader from "./auth-header";
+//import authHeader from "../services/auth-header";
+import api from "../services/api";
 
 class UploadFilesService {
   upload(file, onUploadProgress) {
     let formData = new FormData();
     formData.append("file", file);
 
-    let headersWithBearer = authHeader();
-    const newHeader = {
-      Authorization: headersWithBearer.Authorization,
-      "Content-Type": "multipart/form-data",
-    };
+    //let headersWithBearer = authHeader();
+    // const newHeader = {
+    //   Authorization: headersWithBearer.Authorization,
+    //   "Content-Type": "multipart/form-data",
+    // };
 
-    return http.post("/images/upload", formData, {
-      headers: newHeader,
+    return api.post("/images/upload", formData, {
+      //headers: newHeader,
       onUploadProgress,
     });
   }

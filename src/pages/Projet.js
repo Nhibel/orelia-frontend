@@ -1,25 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import ProjetService from "../services/projet.service";
 
 export default function Projet() {
   const { slug } = useParams();
-  const location = useLocation();
 
   const [projet, setProjet] = useState();
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (location.state) {
-      setProjet(location.state);
+    ProjetService.getProjetById(slug).then((result) => {
+      setProjet(result.data.data);
       setLoading(false);
-    } else {
-      axios.get(`/projets/${slug}`).then((result) => {
-        setProjet(result.data.data);
-        setLoading(false);
-      });
-    }
+    });
   }, []);
 
   if (isLoading) {

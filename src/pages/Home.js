@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { Fade } from "react-slideshow-image";
+import ArticleService from "../services/article.service";
 import "react-slideshow-image/dist/styles.css";
-import http from "../http-commons";
 
 export default function Home() {
   const [article, setArticle] = useState();
@@ -12,10 +11,12 @@ export default function Home() {
   const [gallery, setGallery] = useState([]);
 
   useEffect(() => {
-    const getArticles = async () => {
-      const result = await axios.get("/articles/section/home");
-      setArticle(result.data.data);
-    };
+    const getArticles = () =>
+      ArticleService.getArticlesBySectionName("home").then((result) => {
+        setArticle(result.data.data);
+        setLoading(false);
+      });
+
     if (!article) {
       getArticles();
     } else if (article) {

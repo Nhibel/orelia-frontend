@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
+import ProjetService from "../services/projet.service";
 
 export default function Projets() {
   const [projets, setProjets] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`/projets/all`).then((res) => {
+    ProjetService.getProjets().then((res) => {
       setProjets(res.data.data);
     });
   }, []);

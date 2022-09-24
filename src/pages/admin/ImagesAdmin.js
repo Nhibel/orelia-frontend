@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import AuthService from "../../services/auth.service";
 import UploadService from "../../services/upload-files.service";
 import axios from "axios";
+import ImageService from "../../services/image.service";
 
 export default function ImagesAdmin() {
   const [showPage, setShowPage] = useState(false);
@@ -24,12 +25,13 @@ export default function ImagesAdmin() {
   };
 
   const getImages = async () => {
-    const pictures = await axios.get("/images/get-all");
-    setImages(pictures.data.data);
+    await ImageService.getImages().then((res) => {
+      setImages(res.data.data);
+    });
   };
 
   const deleteImage = (filename) => {
-    axios.delete(`/images/${filename}`).then((response) => {
+    ImageService.deleteImageByFilename(filename).then((response) => {
       response = "OK" ? getImages() : alert("error");
     });
   };
