@@ -13,6 +13,7 @@ export default function Home() {
   useEffect(() => {
     const getArticles = () =>
       ArticleService.getArticlesBySectionName("home").then((result) => {
+        console.log(result.data.data);
         setArticle(result.data.data);
         setLoading(false);
       });
@@ -56,6 +57,20 @@ export default function Home() {
           zIndex: 0,
         }}
       >
+        <div
+          className="p-3 rounded"
+          style={{
+            position: "fixed",
+            zIndex: 10,
+            marginTop: "180px",
+            marginLeft: "50px",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
+          }}
+        >
+          <h2>{article.title}</h2>
+          <h4 style={{ whiteSpace: "pre" }}>{article.richText}</h4>
+        </div>
+
         <Fade {...fadeProperties}>
           {gallery.map((image, index) => (
             <div key={index}>

@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import api from "../services/api";
+import ArticleService from "../services/article.service";
+import ImageService from "../services/image.service";
 
-export default function ModalAjouterImage({
+export default function ModalAjouterImageArticle({
+  idArticle,
   closeModal,
   show,
-  idProjet,
   reloadImagesFunc,
-  type,
-  selectionImage,
-  updateImagesFunc,
 }) {
   const [isLoading, setLoading] = useState(true);
   const [gallery, setGallery] = useState();
@@ -19,8 +17,7 @@ export default function ModalAjouterImage({
 
   useEffect(() => {
     const fetchPictures = async () => {
-      const pictures = await api.get("/images/get-all");
-      console.log(pictures.data.data);
+      const pictures = await ImageService.getImages();
       setGallery(pictures.data.data);
       setLoading(false);
     };
@@ -33,17 +30,10 @@ export default function ModalAjouterImage({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (type === "creation") {
-      console.log("imagesSelected : ", imagesSelected);
-      selectionImage(imagesSelected);
-      updateImagesFunc();
-      closeModal(false);
-    } else {
-      await api
-        .put(`http://localhost:8080/projets/${idProjet}/images`, imagesSelected)
-        .then(closeModal(false));
-      reloadImagesFunc();
-    }
+    await ArticleService.ajouterImagesArticle(idArticle, imagesSelected).then(
+      closeModal(false)
+    );
+    reloadImagesFunc();
   };
 
   const handleImageSelect = (e) => {
@@ -64,13 +54,13 @@ export default function ModalAjouterImage({
       onHide={() => closeModal(false)}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Ajouter des images au projet</Modal.Title>
+        <Modal.Title>Ajouter des images à l'article</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <div className="d-flex flex-row flex-wrap justify-content-around">
             {gallery.map((image, index) => {
-              if (image.projetsId === null) {
+              if (!image.idArticles.includes(idArticle)) {
                 return (
                   <div key={index} className="p-2">
                     <Form.Check

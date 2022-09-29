@@ -6,11 +6,14 @@ import Projet from "./pages/Projet";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Profile from "./Components/Profile";
-import ProjetsAdmin from "./pages/admin/ProjetsAdmin";
+import Admin from "./pages/admin/Admin";
 import ProjetAdmin from "./pages/admin/ProjetAdmin";
 import ImagesAdmin from "./pages/admin/ImagesAdmin";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Container from "react-bootstrap/Container";
+import AjouterProjet from "./pages/admin/AjouterProjet";
+import ArticleAdmin from "./pages/admin/ArticleAdmin";
+import AjouterArticle from "./pages/admin/AjouterArticle";
 
 function App() {
   return (
@@ -25,9 +28,24 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/projets" exact element={<Projets />} />
             <Route path="/projets/:slug" exact element={<Projet />} />
-            <Route path="/admin" element={<ProjetsAdmin />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="/projetAdmin/:slug" exact element={<ProjetAdmin />} />
+            <Route
+              path="/articleAdmin/:slug"
+              exact
+              element={<ArticleAdmin />}
+            />
             <Route path="/admin/images" exact element={<ImagesAdmin />} />
+            <Route
+              path="/admin/ajout-projet"
+              exact
+              element={<AjouterProjet />}
+            />
+            <Route
+              path="/admin/ajout-article"
+              exact
+              element={<AjouterArticle />}
+            />
             <Route path="/" element={() => <div>ERREUR 404</div>} />
           </Routes>
         </Container>

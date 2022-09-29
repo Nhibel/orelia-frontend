@@ -2,20 +2,20 @@ import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import ProjetService from "../services/projet.service";
+import ArticleService from "../services/article.service";
 
-export default function ModalRetirerImage({
+export default function ModalRetirerImageArticle({
   closeModal,
   show,
-  idProjet,
+  idArticle,
   reloadImagesFunc,
-  projetImages,
+  articleImages,
 }) {
   const [imagesSelected, setImagesSelected] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await ProjetService.removeImageProjet(idProjet, imagesSelected);
+    await ArticleService.removeImageArticle(idArticle, imagesSelected);
     reloadImagesFunc();
     closeModal(false);
   };
@@ -43,7 +43,7 @@ export default function ModalRetirerImage({
       <Modal.Body>
         <Form>
           <div className="d-flex flex-row flex-wrap justify-content-around">
-            {projetImages.map((image, index) => {
+            {articleImages.map((image, index) => {
               return (
                 <div key={index} className="p-2">
                   <Form.Check

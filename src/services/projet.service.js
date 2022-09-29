@@ -4,6 +4,14 @@ const getProjetById = (idProjet) => {
   return api.get(`/projets/${idProjet}`);
 };
 
+const ajouterProjet = (projet) => {
+  return api.post("/projets/", projet);
+};
+
+const supprimerProjet = (idProjet) => {
+  return api.delete(`/projets/${idProjet}`);
+};
+
 const getProjets = () => {
   return api.get("/projets/all");
 };
@@ -26,6 +34,8 @@ const ProjetService = {
   gererImageEnValeur,
   updateProjet,
   removeImageProjet,
+  ajouterProjet,
+  supprimerProjet,
 };
 
 export default ProjetService;

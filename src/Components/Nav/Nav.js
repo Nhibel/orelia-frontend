@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Nav.css";
-// NavLink sert à ajouter une classe à l'élément en cours
-// Pas obligatoire, on peut très bien utiliser Nav
-import { NavLink } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -67,7 +64,7 @@ export default function NavMenu() {
             href="tel:0631684770"
             className="pt-1 pb-1 pl-0 pr-2 call-me"
           >
-            Appelez-moi : 06 31 68 47 70
+            Me contacter : 06 31 68 47 70
           </Nav.Link>
 
           {currentUser && (
@@ -100,6 +97,8 @@ export default function NavMenu() {
         <Nav className="me-auto principal-navlink" style={{ fontSize: "25px" }}>
           <Nav.Link href="/">Home</Nav.Link>
           <Nav.Link href="/Projets">Projets</Nav.Link>
+          <Nav.Link href="/Projets">About</Nav.Link>
+          <Nav.Link href="/Projets">Contact</Nav.Link>
         </Nav>
       </Navbar>
     </>

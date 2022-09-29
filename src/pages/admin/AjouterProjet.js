@@ -1,48 +1,39 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import ModalAjouterImage from "../../Components/ModalAjouterImage";
-import ModalRetirerImage from "../../Components/ModalRetirerImages";
 import { Card } from "react-bootstrap";
-import toast, { Toaster } from "react-hot-toast";
 import ProjetService from "../../services/projet.service";
+import ImageService from "../../services/image.service";
 
-export default function ProjetAdmin() {
-  const { slug } = useParams();
-
+export default function AjouterProjet() {
   const [projet, setProjet] = useState();
-  const [title, setTitle] = useState();
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
+  const [openModalAjoutImage, setOpenModalAjoutImage] = useState(false);
+  const [selectionImages, setSelectionImage] = useState([]);
+  const [selectionImageToShow, setSelectionImageToShow] = useState([]);
+  const [images, setImages] = useState();
 
   // Permet de mettre à jour la sélection d'image
   const [key, setKey] = useState(new Date());
 
-  const [openModalAjoutImage, setOpenModalAjoutImage] = useState(false);
-  const [openModalRetirerImage, setOpenModalRetirerImage] = useState(false);
-
   const optionSelect = ["Illustration", "Graphisme", "Maquette"];
 
   useEffect(() => {
-    loadProjet();
-  }, []);
-
-  const loadProjet = () => {
-    ProjetService.getProjetById(slug).then((res) => {
-      setProjet(res.data.data);
-      setTitle(res.data.data.title);
-      setLoading(false);
-    });
-  };
-
-  const reLoadProjet = async () => {
-    await ProjetService.getProjetById(slug).then((res) => {
-      setProjet(res.data.data);
-    });
-    setKey(new Date());
-  };
+    if (images) {
+      const compareIdImages = images.filter((image) =>
+        selectionImages.includes(image.idImage.toString())
+      );
+      setProjet((projet) => ({
+        ...projet,
+        images: compareIdImages,
+      }));
+      setSelectionImageToShow(compareIdImages);
+      setKey(new Date());
+    }
+  }, [images]);
 
   const handleTitleChange = (e) => {
     setProjet((projet) => ({
@@ -65,38 +56,41 @@ export default function ProjetAdmin() {
     }));
   };
 
-  const handleImageSelect = async (idImage) => {
-    await ProjetService.gererImageEnValeur(projet.id, idImage, projet)
-      .then((res) => {
-        setProjet(res.data.data);
-        toast.success("Image mise en valeur avec succès !");
-      })
-      .catch(function (error) {
-        if (error.response) {
-          toast.error("Erreur lors du changement d'image en valeur");
-        }
-      });
-    reLoadProjet();
+  const handleImageEnValeur = (idImage) => {
+    setProjet((projet) => ({
+      ...projet,
+      idImageThumbnail: idImage,
+    }));
+  };
+
+  const handleRetirerImage = (idImage) => {
+    const arrCopy = Array.from(projet.images);
+    const objWithIdIndex = arrCopy.findIndex((obj) => obj.idImage === idImage);
+    arrCopy.splice(objWithIdIndex, 1);
+    setProjet((projet) => ({
+      ...projet,
+      images: arrCopy,
+    }));
+    setSelectionImageToShow(arrCopy);
+    console.log("projet.images : ", projet.images);
+    setKey(new Date());
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    ProjetService.updateProjet(projet)
-      .then((res) => {
-        toast.success("Projet mis à jour avec succès !");
-        setProjet(res.data.data);
-      })
-      .catch(function (error) {
-        if (error.response) {
-          toast.error("Erreur lors de la mise à jour du projet");
-        }
-      });
+    ProjetService.ajouterProjet(projet).then((res) => {
+      console.log("projet créé : ", res);
+    });
   };
 
-  const handleRemoveImage = async (idImage) => {
-    let newArr = [idImage];
-    await ProjetService.removeImageProjet(projet.id, newArr);
-    reLoadProjet();
+  const getImages = async () => {
+    await ImageService.getImages().then((res) => {
+      setImages(res.data.data);
+    });
+  };
+
+  const updateSelectedImages = async () => {
+    getImages();
   };
 
   if (isLoading) {
@@ -105,9 +99,6 @@ export default function ProjetAdmin() {
 
   return (
     <>
-      <Toaster position="top-right" reverseOrder={false} />
-      <h2 className="mt-2 mb-4">Modifier le projet {title}</h2>
-
       <Button
         onClick={() => {
           setOpenModalAjoutImage(true);
@@ -121,27 +112,12 @@ export default function ProjetAdmin() {
         <ModalAjouterImage
           closeModal={setOpenModalAjoutImage}
           show={openModalAjoutImage}
-          idProjet={projet.id}
-          reloadImagesFunc={reLoadProjet}
-          projetImages={projet.images}
-        />
-      )}
-
-      <Button
-        onClick={() => {
-          setOpenModalRetirerImage(true);
-        }}
-      >
-        Retirer Images
-      </Button>
-
-      {openModalRetirerImage && (
-        <ModalRetirerImage
-          closeModal={setOpenModalRetirerImage}
-          show={openModalRetirerImage}
-          idProjet={projet.id}
-          reloadImagesFunc={reLoadProjet}
-          projetImages={projet.images}
+          //idProjet={projet.id}
+          //reloadImagesFunc={reLoadProjet}
+          //projetImages={projet.images}
+          type={"creation"}
+          selectionImage={setSelectionImage}
+          updateImagesFunc={updateSelectedImages}
         />
       )}
 
@@ -153,7 +129,7 @@ export default function ProjetAdmin() {
         <Row>
           <Col md={12}>
             <Row>
-              <Col md={5}>
+              <Col md={6}>
                 <Form.Group className="mb-3 mt-3">
                   <Form.Label>
                     <h5>Titre du projet :</h5>
@@ -161,7 +137,6 @@ export default function ProjetAdmin() {
                   <Form.Control
                     type="text"
                     placeholder="Indiquer le titre du projet"
-                    value={projet.title}
                     required
                     onChange={(e) => {
                       handleTitleChange(e);
@@ -177,8 +152,10 @@ export default function ProjetAdmin() {
                     onChange={(e) => {
                       handleTypeSelect(e);
                     }}
-                    value={projet.type}
                   >
+                    <option key="blankChoice" hidden value>
+                      Choisir le type de projet
+                    </option>
                     {optionSelect.map((option, index) => (
                       <option value={option} key={index}>
                         {option}
@@ -195,7 +172,6 @@ export default function ProjetAdmin() {
                     rows={8}
                     as="textarea"
                     placeholder="Indiquer le descriptif du projet"
-                    value={projet.richText}
                     onChange={(e) => {
                       handleContentChange(e);
                     }}
@@ -206,30 +182,28 @@ export default function ProjetAdmin() {
                 </Button>
               </Col>
 
-              <Col md={7}>
+              <Col md={6}>
                 <Row>
                   <Col md={12}>
                     <h5>Images du projet</h5>
                   </Col>
                 </Row>
                 <Row>
-                  <Col className="g-2 pt-2 d-flex flex-row flex-wrap" key={key}>
-                    <Row
-                      xs={2}
-                      md={5}
-                      className="g-4"
-                      style={{ width: "100%" }}
-                    >
-                      {[...projet.images]
+                  <Col
+                    className="g-2 pt-2 d-flex flex-row flex-wrap overflow-auto"
+                    key={key}
+                  >
+                    {selectionImageToShow != "" ? (
+                      [...selectionImageToShow]
                         .sort((a, b) => a.name.localeCompare(b.name))
                         .map((image, index) => (
-                          <Col className="m-2">
-                            <Card key={index}>
+                          <Col className="m-2" key={index} md={3}>
+                            <Card style={{ width: "100%" }}>
                               <Card.Img
                                 variant="top"
                                 src={image.thumbUrl}
                                 style={{
-                                  maxHeight: "200px",
+                                  maxHeight: "220px",
                                   objectFit: "cover",
                                   objectPosition: "50% 40%",
                                 }}
@@ -238,7 +212,7 @@ export default function ProjetAdmin() {
                                 <Card.Title
                                   style={{
                                     textOverflow: "ellipsis",
-                                    width: "auto",
+                                    width: "200px",
                                     display: "block",
                                     whiteSpace: "nowrap",
                                     overflow: "hidden",
@@ -253,30 +227,26 @@ export default function ProjetAdmin() {
                                 <Button
                                   size="sm"
                                   onClick={() =>
-                                    handleImageSelect(image.idImage)
+                                    handleImageEnValeur(image.idImage)
                                   }
                                   variant={
+                                    projet.idImageThumbnail &&
                                     image.idImage === projet.idImageThumbnail
                                       ? "success"
                                       : "primary"
                                   }
-                                  style={{
-                                    marginRight: "5px",
-                                    fontSize: "12px",
-                                  }}
+                                  style={{ marginRight: "5px" }}
                                 >
-                                  {image.idImage === projet.idImageThumbnail
+                                  {projet.idImageThumbnail &&
+                                  image.idImage === projet.idImageThumbnail
                                     ? "En valeur"
                                     : "Mettre en valeur"}
                                 </Button>
                                 <Button
-                                  style={{
-                                    fontSize: "12px",
-                                  }}
                                   size="sm"
                                   variant="danger"
                                   onClick={() =>
-                                    handleRemoveImage(image.idImage)
+                                    handleRetirerImage(image.idImage)
                                   }
                                 >
                                   Retirer
@@ -284,8 +254,10 @@ export default function ProjetAdmin() {
                               </Card.Body>
                             </Card>
                           </Col>
-                        ))}
-                    </Row>
+                        ))
+                    ) : (
+                      <p>Pas d'images sélectionnées</p>
+                    )}
                   </Col>
                 </Row>
               </Col>
