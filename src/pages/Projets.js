@@ -18,7 +18,38 @@ export default function Projets() {
 
   return (
     <>
-      {projets.map((projet) => (
+      <div className="gallery-container">
+        <div className="images-container">
+          {projets.map((projet) => (
+            <div>
+              {projet.images.map((image) => {
+                {
+                  return (
+                    image.idImage === projet.idImageThumbnail && (
+                      <div
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          navigateToProject(projet.id, projet);
+                        }}
+                      >
+                        <figure class="fig-hover-effect">
+                          <img src={image.thumbUrl} />
+                          <figcaption>
+                            <h2>{projet.title}</h2>
+                            <p>{projet.type}</p>
+                          </figcaption>
+                        </figure>
+                      </div>
+                    )
+                  );
+                }
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* {projets.map((projet) => (
         <div key={projet.id} style={{ listStyleType: "none" }}>
           {projet.images.map(
             (image) =>
@@ -33,7 +64,7 @@ export default function Projets() {
               )
           )}
         </div>
-      ))}
+      ))} */}
     </>
   );
 }
