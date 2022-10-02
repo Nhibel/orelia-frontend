@@ -1,105 +1,55 @@
-import React, { useState, useEffect } from "react";
 import "./Nav.css";
-import AuthService from "../../services/auth.service";
+import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import logo from "./images/logo-nekoayume.svg";
-import instagram from "./images/instagram.png";
-import phone from "./images/phone.png";
-import linkedin from "./images/linkedin.png";
-import mail from "./images/mail.png";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function NavMenu() {
-  const [currentUser, setCurrentUser] = useState(undefined);
-  const [showAdmin, setShowAdmin] = useState(false);
-
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
-      setShowAdmin(user.roles.includes("ROLE_ADMIN"));
-    }
-  }, []);
-
-  const logOut = () => {
-    AuthService.logout();
-    setShowAdmin(false);
-  };
-
   return (
     <>
       <Navbar
-        className="justify-content-end contact-navlink"
+        expand="lg"
+        className="mb-0 shadow-lg fixed-top justify-content-center"
         style={{
-          zIndex: 2,
-          backgroundColor: "#f6cf96",
-        }}
-      >
-        <Nav>
-          <Nav.Link
-            href="https://www.instagram.com/nekoayume/"
-            target="_blank"
-            className="px-2 py-1"
-          >
-            <img src={instagram} alt="instagram" className="contact-icon" />
-          </Nav.Link>
-
-          <Nav.Link
-            href="https://fr.linkedin.com/in/aur%C3%A9lia-bezfamille-03208321"
-            target="_blank"
-            className="px-2 py-1"
-          >
-            <img src={linkedin} alt="linkedin" className="contact-icon" />
-          </Nav.Link>
-
-          <Nav.Link href="/" className="px-2 py-1">
-            <img src={mail} alt="mail" className="contact-icon" />
-          </Nav.Link>
-
-          <Nav.Link href="tel:0631684770" className="px-2 py-1">
-            <img src={phone} alt="phone" className="contact-icon" />
-          </Nav.Link>
-
-          <Nav.Link
-            href="tel:0631684770"
-            className="pt-1 pb-1 pl-0 pr-2 call-me"
-          >
-            Me contacter : 06 31 68 47 70
-          </Nav.Link>
-
-          {currentUser && (
-            <Nav.Link href="/admin" className="px-2 py-1">
-              ADMIN
-            </Nav.Link>
-          )}
-
-          <Nav.Link
-            className="px-2 py-1"
-            onClick={() => {
-              logOut();
-            }}
-          >
-            LOGOUT
-          </Nav.Link>
-        </Nav>
-      </Navbar>
-      <Navbar
-        className="mb-0 shadow-lg"
-        style={{
-          zIndex: 2,
+          zIndex: 20,
           backdropFilter: "blur(2px)",
-          paddingLeft: "15px",
         }}
       >
-        <Navbar.Brand href="/" className="m-0 p-0">
-          <img src={logo} alt="" style={{ height: "75px" }} />
-        </Navbar.Brand>
-        <Nav className="me-auto principal-navlink" style={{ fontSize: "25px" }}>
-          <Nav.Link href="/">Home</Nav.Link>
-          <Nav.Link href="/Projets">Projets</Nav.Link>
-          <Nav.Link href="/Projets">About</Nav.Link>
-          <Nav.Link href="/Projets">Contact</Nav.Link>
-        </Nav>
+        <AnimatePresence>
+          <motion.div
+            layout
+            initial={{ marginTop: "-200px" }}
+            animate={{ marginTop: "0px" }}
+            exit={{ marginTop: "-200px" }}
+          >
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav
+                className="principal-navlink menu-top"
+                style={{ fontSize: "30px", fontFamily: "Pacifico" }}
+              >
+                <Nav.Link as={Link} to="/" className="mx-4 mt-1">
+                  Home
+                </Nav.Link>
+                <Nav.Link as={Link} to="/Projets" className="mx-4 mt-1">
+                  Projets
+                </Nav.Link>
+                <motion.div whileHover={{ scale: 1.2 }}>
+                  <Navbar.Brand as={Link} to="/" className="m-0 p-0 mx-4">
+                    <img src={logo} alt="" style={{ height: "75px" }} />
+                  </Navbar.Brand>
+                </motion.div>
+                <Nav.Link as={Link} to="/about" className="mx-4 mt-1">
+                  About
+                </Nav.Link>
+                <Nav.Link as={Link} to="/contact" className="mx-4 mt-1">
+                  Contact
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </motion.div>
+        </AnimatePresence>
       </Navbar>
     </>
   );

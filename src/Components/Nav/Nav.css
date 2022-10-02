@@ -11,3 +11,12 @@
 a.current {
   background: #f1f1f1;
 }
+
+.principal-navlink a{
+  color: black!important;
+}
+
+.principal-navlink .nav-link:hover {
+  color: #f69100!important;
+  /* text-shadow: 1px 1px 2px black; */
+}

@@ -29,7 +29,6 @@ export default function Admin() {
         setProjets(res.data.data);
       });
       ArticleService.getArticles().then((res) => {
-        console.log(res.data.data);
         setArticles(res.data.data);
       });
     }
@@ -76,7 +75,7 @@ export default function Admin() {
   };
 
   return (
-    <>
+    <div className="contenu">
       <Toaster position="top-right" reverseOrder={false} />
 
       {modalInfo && (
@@ -164,7 +163,7 @@ export default function Admin() {
           </Row>
         </div>
       ) : (
-        <div className="d-flex align-items-center flex-column">
+        <div className="d-flex align-items-center flex-column contenu">
           <p className="h1 text-center mt-5 pb-3">
             Vous n'avez pas accès à cette page
           </p>
@@ -174,6 +173,6 @@ export default function Admin() {
           />
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 import "./App.css";
 import Home from "./pages/Home";
 import NavMenu from "./Components/Nav/Nav";
+import Footer from "./Components/Footer/Footer";
 import Projets from "./pages/Projets";
 import Projet from "./pages/Projet";
 import Login from "./Components/Login";
@@ -14,6 +15,8 @@ import Container from "react-bootstrap/Container";
 import AjouterProjet from "./pages/admin/AjouterProjet";
 import ArticleAdmin from "./pages/admin/ArticleAdmin";
 import AjouterArticle from "./pages/admin/AjouterArticle";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -28,6 +31,8 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/projets" exact element={<Projets />} />
             <Route path="/projets/:slug" exact element={<Projet />} />
+            <Route path="/about" exact element={<About />} />
+            <Route path="/contact" exact element={<Contact />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/projetAdmin/:slug" exact element={<ProjetAdmin />} />
             <Route
@@ -49,6 +54,7 @@ function App() {
             <Route path="/" element={() => <div>ERREUR 404</div>} />
           </Routes>
         </Container>
+        <Footer />
       </Router>
     </>
   );

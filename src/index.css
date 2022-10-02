@@ -1,5 +1,3 @@
-
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -14,31 +12,8 @@ code {
     monospace;
 }
 
-.principal-navlink a{
-  color: black!important;
-}
-
-.nav-link:hover {
-  color: #f69100!important;
-  text-shadow: 1px 1px 2px black;
-}
-
-.contact-icon {
-  height:18px;
-  margin-top: -5px;
-}
-
-.contact-navlink {
-  height:30px;
-}
-
-.contact-navlink img {
-  padding-right: 0px;
-}
-
-.call-me {
-  padding-left:0!important;
-  color:grey!important
+.contenu {
+  margin-top:120px!important;
 }
 
 .gallery-container {
@@ -55,6 +30,24 @@ code {
   /* margin-bottom: 10px; */
   border-radius: 5px;
   width: 100%;
+}
+
+.menu-projets-btn {
+  border: none;
+  cursor: pointer;
+  background-color:#fbdbae;
+}
+
+.active {
+  background-color:#2ae1ff!important;
+}
+
+.required {
+  color:red
+}
+
+.navbar-toggler {
+  margin-left: 40px;
 }
 
 h1, h2 {

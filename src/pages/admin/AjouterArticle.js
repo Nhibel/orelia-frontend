@@ -34,9 +34,7 @@ export default function AjouterArticle() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    ArticleService.creerArticle(article).then((res) => {
-      console.log("projet créé : ", res);
-    });
+    ArticleService.creerArticle(article).then((res) => {});
   };
 
   if (isLoading) {
@@ -44,7 +42,7 @@ export default function AjouterArticle() {
   }
 
   return (
-    <>
+    <div className="contenu">
       <Form
         onSubmit={(e) => {
           handleSubmit(e);
@@ -103,6 +101,6 @@ export default function AjouterArticle() {
           </Col>
         </Row>
       </Form>
-    </>
+    </div>
   );
 }

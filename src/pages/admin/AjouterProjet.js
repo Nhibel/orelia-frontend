@@ -72,15 +72,12 @@ export default function AjouterProjet() {
       images: arrCopy,
     }));
     setSelectionImageToShow(arrCopy);
-    console.log("projet.images : ", projet.images);
     setKey(new Date());
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    ProjetService.ajouterProjet(projet).then((res) => {
-      console.log("projet créé : ", res);
-    });
+    ProjetService.ajouterProjet(projet).then((res) => {});
   };
 
   const getImages = async () => {
@@ -98,7 +95,7 @@ export default function AjouterProjet() {
   }
 
   return (
-    <>
+    <div className="contenu">
       <Button
         onClick={() => {
           setOpenModalAjoutImage(true);
@@ -265,6 +262,6 @@ export default function AjouterProjet() {
           </Col>
         </Row>
       </Form>
-    </>
+    </div>
   );
 }

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { Fade } from "react-slideshow-image";
@@ -13,7 +12,6 @@ export default function Home() {
   useEffect(() => {
     const getArticles = () =>
       ArticleService.getArticlesBySectionName("home").then((result) => {
-        console.log(result.data.data);
         setArticle(result.data.data);
         setLoading(false);
       });
@@ -49,7 +47,7 @@ export default function Home() {
     <>
       <div
         style={{
-          marginTop: "-121px",
+          //marginTop: "-121px",
           overflow: "hidden",
           marginLeft: "-0.75rem",
           marginRight: "-0.75rem",

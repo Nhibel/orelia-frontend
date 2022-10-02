@@ -20,7 +20,6 @@ export default function ModalAjouterImage({
   useEffect(() => {
     const fetchPictures = async () => {
       const pictures = await api.get("/images/get-all");
-      console.log(pictures.data.data);
       setGallery(pictures.data.data);
       setLoading(false);
     };
@@ -34,7 +33,6 @@ export default function ModalAjouterImage({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (type === "creation") {
-      console.log("imagesSelected : ", imagesSelected);
       selectionImage(imagesSelected);
       updateImagesFunc();
       closeModal(false);

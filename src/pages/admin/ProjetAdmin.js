@@ -9,6 +9,7 @@ import ModalRetirerImage from "../../Components/ModalRetirerImages";
 import { Card } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
 import ProjetService from "../../services/projet.service";
+import { useNavigate } from "react-router-dom";
 
 export default function ProjetAdmin() {
   const { slug } = useParams();
@@ -22,6 +23,8 @@ export default function ProjetAdmin() {
 
   const [openModalAjoutImage, setOpenModalAjoutImage] = useState(false);
   const [openModalRetirerImage, setOpenModalRetirerImage] = useState(false);
+
+  const navigate = useNavigate();
 
   const optionSelect = ["Illustration", "Graphisme", "Maquette"];
 
@@ -73,7 +76,11 @@ export default function ProjetAdmin() {
       })
       .catch(function (error) {
         if (error.response) {
-          toast.error("Erreur lors du changement d'image en valeur");
+          if (error.response.data.statusCode === 403) {
+            toast.error("Token expiré, veuillez-vous reconnecter.");
+          } else {
+            toast.error("Erreur lors du changement d'image en valeur");
+          }
         }
       });
     reLoadProjet();
@@ -88,7 +95,14 @@ export default function ProjetAdmin() {
       })
       .catch(function (error) {
         if (error.response) {
-          toast.error("Erreur lors de la mise à jour du projet");
+          if (error.response.data.statusCode === 403) {
+            toast.error(
+              "Token expiré, redirection vers l'écran de connection..."
+            );
+            setTimeout(() => navigate(`/login/`), 3000);
+          } else {
+            toast.error("Erreur lors de la mise à jour du projet");
+          }
         }
       });
   };
@@ -104,7 +118,7 @@ export default function ProjetAdmin() {
   }
 
   return (
-    <>
+    <div className="contenu">
       <Toaster position="top-right" reverseOrder={false} />
       <h2 className="mt-2 mb-4">Modifier le projet {title}</h2>
 
@@ -293,6 +307,6 @@ export default function ProjetAdmin() {
           </Col>
         </Row>
       </Form>
-    </>
+    </div>
   );
 }

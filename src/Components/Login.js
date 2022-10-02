@@ -37,7 +37,7 @@ const Login = () => {
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.login(username, password).then(
         () => {
-          navigate("/profile");
+          navigate("/admin");
           window.location.reload();
         },
         (error) => {
@@ -56,7 +56,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="col-md-12">
+    <div className="col-md-12 contenu">
       <div className="card card-container">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"

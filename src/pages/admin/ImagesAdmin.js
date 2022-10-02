@@ -45,7 +45,7 @@ export default function ImagesAdmin() {
   }, []);
 
   return (
-    <>
+    <div className="contenu">
       <Button variant="primary" onClick={handleShow} className="mb-3">
         Ajouter Images
       </Button>
@@ -86,6 +86,6 @@ export default function ImagesAdmin() {
             </div>
           ))}
       </div>
-    </>
+    </div>
   );
 }
