@@ -24,6 +24,13 @@ const updateProjet = (projet) => {
   return api.put("/projets/", projet);
 };
 
+const ajouterImagesToProjet = (idProjet, imagesSelected) => {
+  return api.put(
+    `http://localhost:8080/projets/${idProjet}/images`,
+    imagesSelected
+  );
+};
+
 const removeImageProjet = (idProjet, arrIdImage) => {
   return api.put(`/projets/${idProjet}/remove/images`, arrIdImage);
 };
@@ -36,6 +43,7 @@ const ProjetService = {
   removeImageProjet,
   ajouterProjet,
   supprimerProjet,
+  ajouterImagesToProjet,
 };
 
 export default ProjetService;

@@ -17,8 +17,21 @@ import ArticleAdmin from "./pages/admin/ArticleAdmin";
 import AjouterArticle from "./pages/admin/AjouterArticle";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
+import PageNotFound from "./pages/PageNotFound";
+import AuthService from "./services/auth.service";
+import { Navigate } from "react-router-dom";
 
 function App() {
+  const ProtectedRoute = ({ children }) => {
+    const user = AuthService.getCurrentUser();
+
+    if (!user) {
+      return <Navigate to="/" replace />;
+    }
+
+    return children;
+  };
+
   return (
     <>
       <Router>
@@ -28,30 +41,72 @@ function App() {
             <Route path="/" exact element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/projets" exact element={<Projets />} />
             <Route path="/projets/:slug" exact element={<Projet />} />
             <Route path="/about" exact element={<About />} />
             <Route path="/contact" exact element={<Contact />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/projetAdmin/:slug" exact element={<ProjetAdmin />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/projetAdmin/:slug"
+              exact
+              element={
+                <ProtectedRoute>
+                  <ProjetAdmin />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/articleAdmin/:slug"
               exact
-              element={<ArticleAdmin />}
+              element={
+                <ProtectedRoute>
+                  <ArticleAdmin />
+                </ProtectedRoute>
+              }
             />
-            <Route path="/admin/images" exact element={<ImagesAdmin />} />
+            <Route
+              path="/admin/images"
+              exact
+              element={
+                <ProtectedRoute>
+                  <ImagesAdmin />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/admin/ajout-projet"
               exact
-              element={<AjouterProjet />}
+              element={
+                <ProtectedRoute>
+                  <AjouterProjet />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/admin/ajout-article"
               exact
-              element={<AjouterArticle />}
+              element={
+                <ProtectedRoute>
+                  <AjouterArticle />
+                </ProtectedRoute>
+              }
             />
-            <Route path="/" element={() => <div>ERREUR 404</div>} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Container>
         <Footer />

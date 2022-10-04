@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import api from "../services/api";
+import ProjetService from "../services/projet.service";
 
 export default function ModalAjouterImage({
   closeModal,
@@ -37,9 +38,9 @@ export default function ModalAjouterImage({
       updateImagesFunc();
       closeModal(false);
     } else {
-      await api
-        .put(`http://localhost:8080/projets/${idProjet}/images`, imagesSelected)
-        .then(closeModal(false));
+      await ProjetService.ajouterImagesToProjet(idProjet, imagesSelected).then(
+        closeModal(false)
+      );
       reloadImagesFunc();
     }
   };
