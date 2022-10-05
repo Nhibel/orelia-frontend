@@ -14,6 +14,7 @@ export default function NavMenu() {
         style={{
           zIndex: 20,
           backdropFilter: "blur(2px)",
+          textAlign: "center",
         }}
       >
         <AnimatePresence>
