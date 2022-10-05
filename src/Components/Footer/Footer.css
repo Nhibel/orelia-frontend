@@ -1,6 +1,12 @@
 .footer {   
     z-index: 2;
     background-color: #f3910c;
+    justify-content: center !important;
+    text-align: center;
+}
+
+.footer .active {
+  background-color: #f3910c!important;
 }
 
 .call-me {
@@ -8,14 +14,15 @@
     color:black!important
   }
 
-  .contact-icon {
+ .contact-icon {
     height:18px;
     margin-top: -5px;
   }
   
+  /*
   .contact-navlink {
     height:30px;
-  }
+  } */
   
   .contact-navlink img {
     padding-right: 0px;
