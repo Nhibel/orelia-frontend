@@ -83,7 +83,7 @@ export default function ModalAjouterImage({
                     ></Form.Check>
                     <img
                       style={{ height: "200px" }}
-                      src={image.url.replace(image.name, "thumb-" + image.name)}
+                      src={image.thumbUrl}
                       alt=""
                     />
                   </div>
