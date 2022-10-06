@@ -25,10 +25,7 @@ const updateProjet = (projet) => {
 };
 
 const ajouterImagesToProjet = (idProjet, imagesSelected) => {
-  return api.put(
-    `http://localhost:8080/projets/${idProjet}/images`,
-    imagesSelected
-  );
+  return api.put(`/projets/${idProjet}/images`, imagesSelected);
 };
 
 const removeImageProjet = (idProjet, arrIdImage) => {
