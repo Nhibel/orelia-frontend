@@ -55,7 +55,6 @@ export default function ModifierArticleAbout({ slug }) {
 
   return (
     <>
-      <Toaster position="top-right" reverseOrder={false} />
       {!isLoading && tinyGallery.length && (
         <div className="d-flex justify-content-center">
           <div style={{ width: "75%" }}>

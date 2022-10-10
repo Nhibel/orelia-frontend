@@ -20,6 +20,7 @@ import About from "./pages/About";
 import PageNotFound from "./pages/PageNotFound";
 import AuthService from "./services/auth.service";
 import { Navigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
   const ProtectedRoute = ({ children }) => {
@@ -37,6 +38,7 @@ function App() {
       <Router>
         <NavMenu />
         <Container fluid>
+          <Toaster position="top-right" reverseOrder={false} />
           <Routes>
             <Route path="/" exact element={<Home />} />
             <Route path="/login" element={<Login />} />

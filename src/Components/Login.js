@@ -1,27 +1,20 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../services/auth.service";
 import { useEffect } from "react";
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
-const Login = () => {
+import { Card } from "react-bootstrap";
+import { Col } from "react-bootstrap";
+import { Form } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+
+export default function Login() {
   let navigate = useNavigate();
-  const form = useRef();
-  const checkBtn = useRef();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [validated, setValidated] = useState(false);
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -41,8 +34,11 @@ const Login = () => {
     e.preventDefault();
     setMessage("");
     setLoading(true);
-    form.current.validateAll();
-    if (checkBtn.current.context._errors.length === 0) {
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      setLoading(false);
+      e.stopPropagation();
+    } else {
       AuthService.login(username, password).then(
         () => {
           navigate("/admin");
@@ -56,63 +52,73 @@ const Login = () => {
             error.message ||
             error.toString();
           setLoading(false);
+          console.log(resMessage);
           setMessage(resMessage);
         }
       );
-    } else {
-      setLoading(false);
     }
+    setValidated(true);
   };
   return (
-    <div className="col-md-12 contenu">
-      <div className="card card-container">
-        <img
-          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-          alt="profile-img"
-          className="profile-img-card"
-        />
-        <Form onSubmit={handleLogin} ref={form}>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <Input
-              type="text"
-              className="form-control"
-              name="username"
-              value={username}
-              onChange={onChangeUsername}
-              validations={[required]}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <Input
-              type="password"
-              className="form-control"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-              validations={[required]}
-            />
-          </div>
-          <div className="form-group">
-            <button className="btn btn-primary btn-block" disabled={loading}>
-              {loading && (
-                <span className="spinner-border spinner-border-sm"></span>
-              )}
-              <span>Login</span>
-            </button>
-          </div>
-          {message && (
-            <div className="form-group">
-              <div className="alert alert-danger" role="alert">
-                {message}
-              </div>
+    <>
+      <Col md={12} className="contenu d-flex justify-content-center">
+        <Card className="p-3" style={{ width: "50%" }}>
+          <Form noValidate validated={validated} onSubmit={handleLogin}>
+            <Form.Group as={Col} controlId="formGridUsername" className="mb-2">
+              <Form.Label>Username</Form.Label>
+
+              <Form.Control
+                required
+                name="username"
+                type="text"
+                placeholder="Username"
+                onChange={onChangeUsername}
+                value={username}
+              />
+              <Form.Control.Feedback type="invalid">
+                Veuillez renseigner votre username
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formGridEmail" className="mb-2">
+              <Form.Label>
+                Password<span className="required"> *</span>
+              </Form.Label>
+              <Form.Control
+                required
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={onChangePassword}
+              />
+              <Form.Control.Feedback type="invalid">
+                Veuillez renseigner votre email
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <div className="mt-3 text-center">
+              <Button
+                type="submit"
+                className="rounded-pill mb-3"
+                disabled={loading}
+              >
+                {loading && (
+                  <span className="spinner-border spinner-border-sm"></span>
+                )}
+                Login
+              </Button>
             </div>
-          )}
-          <CheckButton style={{ display: "none" }} ref={checkBtn} />
-        </Form>
-      </div>
-    </div>
+            {message && (
+              <Form.Group>
+                <div className="alert alert-danger" role="alert">
+                  {message}
+                </div>
+              </Form.Group>
+            )}
+          </Form>
+        </Card>
+      </Col>
+    </>
   );
-};
-export default Login;
+}

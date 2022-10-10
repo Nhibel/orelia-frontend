@@ -80,7 +80,6 @@ export default function ModifierArticle({ slug }) {
 
   return (
     <>
-      <Toaster position="top-right" reverseOrder={false} />
       <h2 className="mt-2 mb-4">Modifier l'article {title}</h2>
 
       <Button

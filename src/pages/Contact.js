@@ -80,7 +80,7 @@ export default function Contact() {
                 <Form.Control
                   required
                   name="name"
-                  type="name"
+                  type="text"
                   placeholder="Votre nom..."
                   onChange={handleChange}
                 />

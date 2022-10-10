@@ -70,8 +70,6 @@ export default function Admin() {
 
   return (
     <div className="contenu">
-      <Toaster position="top-right" reverseOrder={false} />
-
       {modalInfo && (
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>

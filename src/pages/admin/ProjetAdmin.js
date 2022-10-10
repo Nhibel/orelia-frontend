@@ -119,7 +119,6 @@ export default function ProjetAdmin() {
 
   return (
     <div className="contenu">
-      <Toaster position="top-right" reverseOrder={false} />
       <h2 className="mt-2 mb-4">Modifier le projet {title}</h2>
 
       <Button
