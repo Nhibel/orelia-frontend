@@ -3,7 +3,6 @@ import TokenService from "./token.service";
 
 const instance = axios.create({
   baseURL: "https://aureliabzf-backend.herokuapp.com/",
-  //baseURL: "http://localhost:8080/",
   headers: {
     "Content-Type": "application/json",
   },
