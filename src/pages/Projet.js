@@ -14,7 +14,6 @@ export default function Projet() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let test = "123456789";
     ProjetService.getProjetById(test)
       .then((result) => {
         setProjet(result.data.data);
