@@ -14,7 +14,7 @@ export default function Projet() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    ProjetService.getProjetById(test)
+    ProjetService.getProjetById(slug)
       .then((result) => {
         setProjet(result.data.data);
         setLoading(false);
