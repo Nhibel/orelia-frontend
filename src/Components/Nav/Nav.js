@@ -1,11 +1,20 @@
 import "./Nav.css";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import logo from "./images/logo-nekoayume.svg";
+import logo from "./images/logo-nekoayume-purple.svg";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function NavMenu() {
+  // Définissez un état pour suivre le bouton actuellement sélectionné
+  const [selectedButton, setSelectedButton] = useState("home");
+
+  // Créez une fonction de gestionnaire d'événements pour mettre à jour l'état lorsqu'un bouton est cliqué
+  const handleButtonClick = (event) => {
+    setSelectedButton(event.target.textContent.toLowerCase());
+  };
+
   return (
     <>
       <Navbar
@@ -30,10 +39,24 @@ export default function NavMenu() {
                 className="principal-navlink menu-top"
                 style={{ fontSize: "30px", fontFamily: "Pacifico" }}
               >
-                <Nav.Link as={Link} to="/" className="mx-4 mt-1">
+                <Nav.Link
+                  as={Link}
+                  to="/"
+                  className={`mx-4 mt-1 ${
+                    selectedButton === "home" ? "current" : ""
+                  }`}
+                  onClick={handleButtonClick}
+                >
                   Home
                 </Nav.Link>
-                <Nav.Link as={Link} to="/Projets" className="mx-4 mt-1">
+                <Nav.Link
+                  as={Link}
+                  to="/Projets"
+                  className={`mx-4 mt-1 ${
+                    selectedButton === "projets" ? "current" : ""
+                  }`}
+                  onClick={handleButtonClick}
+                >
                   Projets
                 </Nav.Link>
                 <motion.div whileHover={{ scale: 1.2 }}>
@@ -41,10 +64,24 @@ export default function NavMenu() {
                     <img src={logo} alt="" style={{ height: "75px" }} />
                   </Navbar.Brand>
                 </motion.div>
-                <Nav.Link as={Link} to="/about" className="mx-4 mt-1">
+                <Nav.Link
+                  as={Link}
+                  to="/about"
+                  className={`mx-4 mt-1 ${
+                    selectedButton === "about" ? "current" : ""
+                  }`}
+                  onClick={handleButtonClick}
+                >
                   About
                 </Nav.Link>
-                <Nav.Link as={Link} to="/contact" className="mx-4 mt-1">
+                <Nav.Link
+                  as={Link}
+                  to="/contact"
+                  className={`mx-4 mt-1 ${
+                    selectedButton === "contact" ? "current" : ""
+                  }`}
+                  onClick={handleButtonClick}
+                >
                   Contact
                 </Nav.Link>
               </Nav>

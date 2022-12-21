@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -7,9 +7,8 @@ import Col from "react-bootstrap/Col";
 import ModalAjouterImage from "../../Components/ModalAjouterImage";
 import ModalRetirerImage from "../../Components/ModalRetirerImages";
 import { Card } from "react-bootstrap";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import ProjetService from "../../services/projet.service";
-import { useNavigate } from "react-router-dom";
 
 export default function ProjetAdmin() {
   const { slug } = useParams();
@@ -236,7 +235,7 @@ export default function ProjetAdmin() {
                       {[...projet.images]
                         .sort((a, b) => a.name.localeCompare(b.name))
                         .map((image, index) => (
-                          <Col className="m-2">
+                          <Col className="m-2" key={image.idImage}>
                             <Card key={index}>
                               <Card.Img
                                 variant="top"

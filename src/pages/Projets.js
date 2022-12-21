@@ -74,18 +74,18 @@ export default function Projets() {
         </div>
         <div className="images-container" key={key}>
           {projets.map((projet) => (
-            <div>
+            <div key={projet.id}>
               <AnimatePresence>
-                {projet.images.map((image, index) => {
+                {projet.images.map((image) => {
                   {
                     return (
                       image.idImage === projet.idImageThumbnail && (
                         <motion.div
-                          key={index}
                           layout
                           initial={{ transform: "scale(0)" }}
                           animate={{ transform: "scale(1)" }}
                           exit={{ transform: "scale(0)" }}
+                          key={image.idImage}
                         >
                           <div
                             style={{ cursor: "pointer" }}

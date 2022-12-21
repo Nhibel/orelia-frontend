@@ -7,6 +7,7 @@ import ModalAjouterImage from "../../Components/ModalAjouterImage";
 import { Card } from "react-bootstrap";
 import ProjetService from "../../services/projet.service";
 import ImageService from "../../services/image.service";
+import { useNavigate } from "react-router-dom";
 
 export default function AjouterProjet() {
   const [projet, setProjet] = useState();
@@ -20,6 +21,8 @@ export default function AjouterProjet() {
   const [key, setKey] = useState(new Date());
 
   const optionSelect = ["Illustration", "Graphisme", "Maquette"];
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     if (images) {
@@ -77,7 +80,10 @@ export default function AjouterProjet() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    ProjetService.ajouterProjet(projet).then((res) => {});
+    ProjetService.ajouterProjet(projet).then((res) => {
+      const result = res.data.data;
+      navigate(`/projetAdmin/${result.id}`);
+    });
   };
 
   const getImages = async () => {

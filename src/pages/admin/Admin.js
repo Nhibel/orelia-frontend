@@ -22,6 +22,7 @@ export default function Admin() {
   useEffect(() => {
     ProjetService.getProjets().then((res) => {
       setProjets(res.data.data);
+      console.log(res.data.data);
     });
     ArticleService.getArticles().then((res) => {
       setArticles(res.data.data);
@@ -112,7 +113,10 @@ export default function Admin() {
             <Card>
               <Card.Header>Liste des articles</Card.Header>
               {articles.map((article) => (
-                <div className="d-flex justify-content-between p-2 border">
+                <div
+                  className="d-flex justify-content-between p-2 border"
+                  key={article.idArticle}
+                >
                   <div
                     className="mr-auto p-1"
                     onClick={() => navigateToArticle(article.section)}
@@ -127,28 +131,33 @@ export default function Admin() {
           <Col key={key}>
             <Card>
               <Card.Header>Liste des projets</Card.Header>
-              {projets.map((projet) => (
-                <div className="d-flex justify-content-between p-2 border">
+              {[...projets]
+                .sort((a, b) => a.title.localeCompare(b.title))
+                .map((projet) => (
                   <div
-                    className="mr-auto p-1"
-                    onClick={() => navigateToProject(projet.id)}
-                    style={{ cursor: "pointer" }}
+                    className="d-flex justify-content-between p-2 border"
+                    key={projet.id}
                   >
-                    {projet.title}
-                  </div>
-                  <div>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() =>
-                        openModalSupprimerProjet(projet.id, projet.title)
-                      }
+                    <div
+                      className="mr-auto p-1"
+                      onClick={() => navigateToProject(projet.id)}
+                      style={{ cursor: "pointer" }}
                     >
-                      Supprimer projet
-                    </Button>
+                      {projet.title}
+                    </div>
+                    <div>
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() =>
+                          openModalSupprimerProjet(projet.id, projet.title)
+                        }
+                      >
+                        Supprimer projet
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </Card>
           </Col>
         </Row>

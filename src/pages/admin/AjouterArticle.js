@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import ModalAjouterImage from "../../Components/ModalAjouterImage";
-import { Card } from "react-bootstrap";
 import ArticleService from "../../services/article.service";
 
 export default function AjouterArticle() {
@@ -34,7 +32,9 @@ export default function AjouterArticle() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    ArticleService.creerArticle(article).then((res) => {});
+    ArticleService.creerArticle(article).then((res) => {
+      // TODO ajouter action
+    });
   };
 
   if (isLoading) {

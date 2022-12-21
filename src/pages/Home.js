@@ -55,7 +55,7 @@ export default function Home() {
           zIndex: 0,
         }}
       >
-        <div
+        {/* <div
           className="p-3 rounded"
           style={{
             position: "fixed",
@@ -67,7 +67,7 @@ export default function Home() {
         >
           <h2>{article.title}</h2>
           <h4 style={{ whiteSpace: "pre" }}>{article.richText}</h4>
-        </div>
+        </div> */}
 
         <Fade {...fadeProperties}>
           {gallery.map((image, index) => (

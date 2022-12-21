@@ -36,7 +36,7 @@ code {
 .menu-projets-btn {
   border: none;
   cursor: pointer;
-  background-color:#fbdbae!important;
+  background-color:#fab8f5!important;
   margin-right: 10px;
   margin-left: 10px;
   text-align: center;
@@ -44,7 +44,7 @@ code {
 }
 
 .active {
-  background-color:#2ae1ff!important;
+  background-color:#ff8df7!important;
 }
 
 .required {
@@ -80,7 +80,7 @@ figure.fig-hover-effect img {
   transition: opacity 0.35s;
 }
 figure.fig-hover-effect:after {
-  background: #f2cc94;
+  background: #ebb7e8;
   width: 100%;
   height: 100%;
   position: absolute;

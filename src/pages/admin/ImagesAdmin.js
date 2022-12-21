@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
 import UploadFiles from "../../Components/upload-files.component";
-import { Modal } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import AuthService from "../../services/auth.service";
-import UploadService from "../../services/upload-files.service";
-import axios from "axios";
 import ImageService from "../../services/image.service";
 
 export default function ImagesAdmin() {
   const [showPage, setShowPage] = useState(false);
   const [images, setImages] = useState();
-  const [reloadGallery, setReloadGallery] = useState();
 
   // Afficher Modal
   const [show, setShow] = useState(false);
