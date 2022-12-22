@@ -55,19 +55,27 @@ export default function Home() {
           zIndex: 0,
         }}
       >
-        {/* <div
-          className="p-3 rounded"
+        <div
           style={{
             position: "fixed",
-            zIndex: 10,
-            marginTop: "180px",
-            marginLeft: "50px",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
+            bottom: "48px",
+            width: "100%",
+            zIndex: 20,
           }}
         >
-          <h2>{article.title}</h2>
-          <h4 style={{ whiteSpace: "pre" }}>{article.richText}</h4>
-        </div> */}
+          <div
+            className="p-3"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255, 255, 255, 0),  rgba(255, 255, 255, 0.7)",
+              color: "black",
+              textAlign: "center",
+            }}
+          >
+            <h2>{article.title}</h2>
+            <h4 style={{ margin: "0" }}>{article.richText}</h4>
+          </div>
+        </div>
 
         <Fade {...fadeProperties}>
           {gallery.map((image, index) => (
