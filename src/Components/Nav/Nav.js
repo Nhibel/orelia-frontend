@@ -19,11 +19,20 @@ export default function NavMenu() {
     <>
       <Navbar
         expand="lg"
-        className="mb-0 shadow-lg fixed-top justify-content-center"
+        className="mb-0 fixed-top justify-content-center w-100"
         style={{
           zIndex: 20,
-          backdropFilter: "blur(2px)",
+          backdropFilter: "blur(6px)",
+          backgroundColor: "rgba(183, 82, 176, 0.8)",
+          margin: "0 auto",
+          borderRadius: "0 0 50px 50px",
+          maxWidth: "750px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
           textAlign: "center",
+          boxShadow:
+            "rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset",
         }}
       >
         <AnimatePresence>
@@ -36,7 +45,7 @@ export default function NavMenu() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav
-                className="principal-navlink menu-top"
+                className="principal-navlink menu-top text-center"
                 style={{ fontSize: "30px", fontFamily: "Pacifico" }}
               >
                 <Nav.Link

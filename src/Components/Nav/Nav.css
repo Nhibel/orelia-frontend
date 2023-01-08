@@ -9,7 +9,7 @@
 }
 
 a.current {
-  color: #993792!important;
+  color: #fff!important;
 }
 
 .principal-navlink a{
@@ -17,6 +17,6 @@ a.current {
 }
 
 .principal-navlink .nav-link:hover {
-  color: #b752b0!important;
+  color: #fff!important;
   /* text-shadow: 1px 1px 2px black; */
 }

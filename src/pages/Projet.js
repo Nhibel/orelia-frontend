@@ -57,13 +57,11 @@ export default function Projet() {
                 >
                   <div key={index}>
                     <img
-                      className="m-5 mt-1 shadow-lg"
+                      className="m-5 mt-1 img-projet"
                       src={image.url}
                       alt=""
                       style={{
                         height: "65vh",
-                        borderRadius: "15px",
-                        border: "1rem solid white",
                       }}
                     />
                   </div>

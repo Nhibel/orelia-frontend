@@ -37,7 +37,7 @@ export default function Projets() {
   return (
     <>
       <div className="gallery-container contenu">
-        <div className="menu-projets d-flex justify-content-center mb-3">
+        <div className="menu-projets d-flex justify-content-center mb-4">
           <motion.div
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
