@@ -1,24 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjetService from "../services/projet.service";
 import { AnimatePresence, motion } from "framer-motion";
+import ProjetContext from "../contexts/projetContext";
 
 export default function Projets() {
-  const [projets, setProjets] = useState([]);
-  const [allProjets, setAllProjets] = useState([]);
+  const { projets, setProjets } = useContext(ProjetContext);
+  const [allProjets, setAllProjets] = useState(projets);
   const [key, setKey] = useState(new Date());
-  const navigate = useNavigate();
   const [active, setActive] = useState("all");
 
-  useEffect(() => {
-    ProjetService.getProjets().then((res) => {
-      setProjets(res.data.data);
-      setAllProjets(res.data.data);
-    });
-  }, []);
+  const navigate = useNavigate();
 
   const navigateToProject = (number, projet) => {
-    navigate(`/projets/${number}`, { state: projet });
+    navigate(`/projets/${number}`, { state: { projet: projet } });
   };
 
   const filterSelection = (e) => {

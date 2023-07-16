@@ -1,24 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { Fade } from "react-slideshow-image";
 import ArticleService from "../services/article.service";
 import "react-slideshow-image/dist/styles.css";
+import ArticleContext from "../contexts/articleContext";
 
 export default function Home() {
-  const [article, setArticle] = useState();
+  const { article, setArticle } = useContext(ArticleContext);
   const [isLoading, setLoading] = useState(true);
   const [gallery, setGallery] = useState([]);
 
   useEffect(() => {
-    const getArticles = () =>
-      ArticleService.getArticlesBySectionName("home").then((result) => {
-        setArticle(result.data.data);
-        setLoading(false);
-      });
-
-    if (!article) {
-      getArticles();
-    } else if (article) {
+    if (article) {
       const getGallery = article.images.map((image) => {
         return image.url;
       });

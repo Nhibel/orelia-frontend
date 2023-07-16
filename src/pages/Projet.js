@@ -3,9 +3,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import ProjetService from "../services/projet.service";
 import toast, { Toaster } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 
 export default function Projet() {
   const { slug } = useParams();
+  const location = useLocation();
 
   const [projet, setProjet] = useState();
   const [isLoading, setLoading] = useState(true);
@@ -13,17 +15,25 @@ export default function Projet() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    ProjetService.getProjetById(slug)
-      .then((result) => {
-        setProjet(result.data.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        error.response.data.messages.map((error) => {
-          toast.error(error.message + ". Retour sur la page projets");
-          setTimeout(() => navigate(`/Projets`), 2000);
+    // Si le state contient les données du projet, utilisez-les
+    if (location.state && location.state.projet) {
+      setProjet(location.state.projet);
+      setLoading(false);
+    }
+    // Sinon, faites un appel API pour obtenir les données du projet
+    else {
+      ProjetService.getProjetById(slug)
+        .then((result) => {
+          setProjet(result.data.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          error.response.data.messages.map((error) => {
+            toast.error(error.message + ". Retour sur la page projets");
+            setTimeout(() => navigate(`/Projets`), 2000);
+          });
         });
-      });
+    }
   }, []);
 
   if (isLoading) {

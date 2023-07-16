@@ -21,6 +21,8 @@ import PageNotFound from "./pages/PageNotFound";
 import AuthService from "./services/auth.service";
 import { Navigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import ProjetProvider from "./contexts/projetProvider";
+import ArticleProvider from "./contexts/articleProvider";
 
 function App() {
   const ProtectedRoute = ({ children }) => {
@@ -35,84 +37,88 @@ function App() {
 
   return (
     <>
-      <Router>
-        <NavMenu />
-        <Container fluid>
-          <Toaster position="top-right" reverseOrder={false} />
-          <Routes>
-            <Route path="/" exact element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/projets" exact element={<Projets />} />
-            <Route path="/projets/:slug" exact element={<Projet />} />
-            <Route path="/about" exact element={<About />} />
-            <Route path="/contact" exact element={<Contact />} />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/projetAdmin/:slug"
-              exact
-              element={
-                <ProtectedRoute>
-                  <ProjetAdmin />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/articleAdmin/:slug"
-              exact
-              element={
-                <ProtectedRoute>
-                  <ArticleAdmin />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/images"
-              exact
-              element={
-                <ProtectedRoute>
-                  <ImagesAdmin />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/ajout-projet"
-              exact
-              element={
-                <ProtectedRoute>
-                  <AjouterProjet />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/ajout-article"
-              exact
-              element={
-                <ProtectedRoute>
-                  <AjouterArticle />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </Container>
-        <Footer />
-      </Router>
+      <ArticleProvider>
+        <ProjetProvider>
+          <Router>
+            <NavMenu />
+            <Container fluid>
+              <Toaster position="top-right" reverseOrder={false} />
+              <Routes>
+                <Route path="/" exact element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/projets" exact element={<Projets />} />
+                <Route path="/projets/:slug" exact element={<Projet />} />
+                <Route path="/about" exact element={<About />} />
+                <Route path="/contact" exact element={<Contact />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <Admin />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/projetAdmin/:slug"
+                  exact
+                  element={
+                    <ProtectedRoute>
+                      <ProjetAdmin />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/articleAdmin/:slug"
+                  exact
+                  element={
+                    <ProtectedRoute>
+                      <ArticleAdmin />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/images"
+                  exact
+                  element={
+                    <ProtectedRoute>
+                      <ImagesAdmin />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/ajout-projet"
+                  exact
+                  element={
+                    <ProtectedRoute>
+                      <AjouterProjet />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/ajout-article"
+                  exact
+                  element={
+                    <ProtectedRoute>
+                      <AjouterArticle />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </Container>
+            <Footer />
+          </Router>
+        </ProjetProvider>
+      </ArticleProvider>
     </>
   );
 }
