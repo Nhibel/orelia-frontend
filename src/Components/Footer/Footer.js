@@ -1,97 +1,45 @@
-import React, { useState, useEffect } from "react";
-import instagram from "./images/instagram.png";
-import phone from "./images/phone.png";
-import linkedin from "./images/linkedin.png";
-import mail from "./images/mail.png";
+import React from "react";
 import AuthService from "../../services/auth.service";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import { Link } from "react-router-dom";
 import "./Footer.css";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
-export default function Footer() {
-  const [currentUser, setCurrentUser] = useState(undefined);
-  const [showAdmin, setShowAdmin] = useState(false);
-
+export default function Footer({ user, setUser }) {
   let navigate = useNavigate();
 
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
-      setShowAdmin(user.roles.includes("ROLE_ADMIN"));
-    }
-  }, []);
+  const navigateToAdmin = () => {
+    AuthService.logout();
+    navigate("/admin");
+  };
 
   const logOut = () => {
     AuthService.logout();
-    setShowAdmin(false);
+    setUser(null);
     navigate("/");
   };
 
   return (
     <>
-      <Navbar
-        className="justify-content-center contact-navlink footer fixed-bottom"
-        expand="lg"
-      >
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse
-          id="basic-navbar-nav"
-          className="justify-content-center"
+      <div className="d-flex justify-content-center position-fixed bottom-0 w-100">
+        <Button
+          variant="info"
+          className="m-2"
+          onClick={() => {
+            navigateToAdmin();
+          }}
         >
-          <Nav>
-            <Nav.Link
-              href="https://www.instagram.com/nekoayume/"
-              target="_blank"
-              className="px-2 py-1"
-            >
-              <img src={instagram} alt="instagram" className="contact-icon" />
-            </Nav.Link>
-
-            <Nav.Link
-              href="https://fr.linkedin.com/in/aur%C3%A9lia-bezfamille-03208321"
-              target="_blank"
-              className="px-2 py-1"
-            >
-              <img src={linkedin} alt="linkedin" className="contact-icon" />
-            </Nav.Link>
-
-            <Nav.Link as={Link} to="/contact" className="px-2 py-1">
-              <img src={mail} alt="mail" className="contact-icon" />
-            </Nav.Link>
-
-            <Nav.Link href="tel:0631684770" className="px-2 py-1">
-              <img src={phone} alt="phone" className="contact-icon" />
-            </Nav.Link>
-
-            <Nav.Link
-              href="tel:0631684770"
-              className="pt-1 pb-1 pl-0 pr-2 call-me"
-            >
-              Me contacter : 06 31 68 47 70
-            </Nav.Link>
-
-            {showAdmin && (
-              <Nav.Link as={Link} to="/admin" className="px-2 py-1">
-                ADMIN
-              </Nav.Link>
-            )}
-
-            {showAdmin && (
-              <Nav.Link
-                className="px-2 py-1"
-                onClick={() => {
-                  logOut();
-                }}
-              >
-                LOGOUT
-              </Nav.Link>
-            )}
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+          ADMIN
+        </Button>
+        <Button
+          variant="danger"
+          className="m-2"
+          onClick={() => {
+            logOut();
+          }}
+        >
+          LOGOUT
+        </Button>
+      </div>
     </>
   );
 }

@@ -50,7 +50,7 @@ export default function Projet() {
             whiteSpace: "pre-wrap",
           }}
         >
-          <h1 className="mt-3 mb-4">{projet.title}</h1>
+          <h1 className="mb-4">{projet.title}</h1>
           <p>{projet.richText}</p>
         </div>
 

@@ -20,3 +20,22 @@ a.current {
   color: #fff!important;
   /* text-shadow: 1px 1px 2px black; */
 }
+
+.call-me {
+  padding-left:0!important;
+  color:black!important
+}
+
+.contact-icon {
+  height:18px;
+  margin-top: -5px;
+}
+
+/*
+.contact-navlink {
+  height:30px;
+} */
+
+.contact-navlink img {
+  padding-right: 0px;
+}

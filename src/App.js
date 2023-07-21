@@ -1,5 +1,11 @@
 import "./App.css";
-import Home from "./pages/Home";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import { useState } from "react";
 import NavMenu from "./Components/Nav/Nav";
 import Footer from "./Components/Footer/Footer";
 import Projets from "./pages/Projets";
@@ -10,7 +16,6 @@ import Profile from "./Components/Profile";
 import Admin from "./pages/admin/Admin";
 import ProjetAdmin from "./pages/admin/ProjetAdmin";
 import ImagesAdmin from "./pages/admin/ImagesAdmin";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import AjouterProjet from "./pages/admin/AjouterProjet";
 import ArticleAdmin from "./pages/admin/ArticleAdmin";
@@ -25,9 +30,9 @@ import ProjetProvider from "./contexts/projetProvider";
 import ArticleProvider from "./contexts/articleProvider";
 
 function App() {
-  const ProtectedRoute = ({ children }) => {
-    const user = AuthService.getCurrentUser();
+  const [user, setUser] = useState(AuthService.getCurrentUser());
 
+  const ProtectedRoute = ({ children }) => {
     if (!user) {
       return <Navigate to="/" replace />;
     }
@@ -44,7 +49,7 @@ function App() {
             <Container fluid>
               <Toaster position="top-right" reverseOrder={false} />
               <Routes>
-                <Route path="/" exact element={<Home />} />
+                <Route path="/" exact element={<Projets />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route
@@ -115,7 +120,7 @@ function App() {
                 <Route path="*" element={<PageNotFound />} />
               </Routes>
             </Container>
-            <Footer />
+            {user && <Footer user={user} setUser={setUser} />}
           </Router>
         </ProjetProvider>
       </ArticleProvider>
