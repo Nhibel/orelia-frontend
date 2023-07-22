@@ -55,7 +55,12 @@ export default function NavMenu() {
           />
         </Navbar.Brand>
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
           <div
             className="principal-navlink menu-top text-end"
             style={{
@@ -109,13 +114,13 @@ export default function NavMenu() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "space-evenly",
               }}
             >
               <Nav.Link
                 href="https://www.instagram.com/nekoayume/"
                 target="_blank"
-                className="px-2 py-1 icon-link"
+                className="px-2 icon-link"
               >
                 <img src={instagram} alt="instagram" className="contact-icon" />
               </Nav.Link>
@@ -123,16 +128,16 @@ export default function NavMenu() {
               <Nav.Link
                 href="https://fr.linkedin.com/in/aur%C3%A9lia-bezfamille-03208321"
                 target="_blank"
-                className="px-2 py-1 icon-link"
+                className="px-2 icon-link"
               >
                 <img src={linkedin} alt="linkedin" className="contact-icon" />
               </Nav.Link>
 
-              <Nav.Link as={Link} to="/contact" className="px-2 py-1 icon-link">
+              <Nav.Link as={Link} to="/contact" className="px-2 icon-link">
                 <img src={mail} alt="mail" className="contact-icon" />
               </Nav.Link>
 
-              <Nav.Link href="tel:0631684770" className="px-2 py-1 icon-link">
+              <Nav.Link href="tel:0631684770" className="px-2 icon-link">
                 <img src={phone} alt="phone" className="contact-icon" />
               </Nav.Link>
             </div>
