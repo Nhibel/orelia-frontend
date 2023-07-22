@@ -1,6 +1,6 @@
 import "./Nav.css";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import logo from "./images/logo.svg";
@@ -12,6 +12,12 @@ import mail from "./images/mail.png";
 export default function NavMenu() {
   // Définissez un état pour suivre le bouton actuellement sélectionné
   const [selectedButton, setSelectedButton] = useState("home");
+  const location = useLocation();
+
+  useEffect(() => {
+    const currentPath = location.pathname.split("/")[1]; // '/' renvoie ['',''], '/about' renvoie ['', 'about']
+    setSelectedButton(currentPath === "" ? "projets" : currentPath);
+  }, [location]);
 
   // Créez une fonction de gestionnaire d'événements pour mettre à jour l'état lorsqu'un bouton est cliqué
   const handleButtonClick = (event) => {

@@ -9,7 +9,7 @@ import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 
 export default function Login() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);

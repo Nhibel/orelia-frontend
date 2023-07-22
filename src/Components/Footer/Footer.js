@@ -1,6 +1,5 @@
 import React from "react";
 import AuthService from "../../services/auth.service";
-import "./Footer.css";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
