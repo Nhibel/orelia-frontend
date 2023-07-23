@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "18.17.0"
+    "node": "14.17.x"
   },
+  "devDependencies": {
+    "typescript": "4.9.5"
+  },  
   "dependencies": {
     "@emailjs/browser": "^3.7.0",
     "@testing-library/jest-dom": "^5.16.4",
