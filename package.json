@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "typescript": "4.9.5"
-  },  
+  },
   "dependencies": {
     "@emailjs/browser": "^3.7.0",
     "@testing-library/jest-dom": "^5.16.4",
