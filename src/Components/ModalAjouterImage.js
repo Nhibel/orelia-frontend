@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import api from "../services/api";
 import ProjetService from "../services/projet.service";
@@ -28,7 +27,7 @@ export default function ModalAjouterImage({
   }, []);
 
   if (isLoading) {
-    return <div></div>;
+    return <div>Chargement...</div>;
   }
 
   const handleSubmit = async (e) => {
@@ -47,7 +46,7 @@ export default function ModalAjouterImage({
 
   const handleImageSelect = (e) => {
     if (e.target.checked) {
-      let newArr = imagesSelected;
+      const newArr = imagesSelected;
       newArr.push(e.target.id);
       setImagesSelected(newArr);
     } else {
@@ -68,28 +67,26 @@ export default function ModalAjouterImage({
       <Modal.Body>
         <Form>
           <div className="d-flex flex-row flex-wrap justify-content-around">
-            {gallery.map((image, index) => {
-              if (image.projetsId === null) {
-                return (
-                  <div key={index} className="p-2">
-                    <Form.Check
-                      type="checkbox"
-                      onChange={(e) => handleImageSelect(e)}
-                      id={image.idImage}
-                      style={{
-                        position: "absolute",
-                        marginLeft: "2px",
-                      }}
-                    ></Form.Check>
-                    <img
-                      style={{ height: "200px" }}
-                      src={image.thumbUrl}
-                      alt=""
-                    />
-                  </div>
-                );
-              }
-            })}
+            {gallery
+              .filter((image) => image.projetsId === null)
+              .map((image) => (
+                <div key={image.idImage} className="p-2">
+                  <Form.Check
+                    type="checkbox"
+                    onChange={(e) => handleImageSelect(e)}
+                    id={image.idImage}
+                    style={{
+                      position: "absolute",
+                      marginLeft: "2px",
+                    }}
+                  />
+                  <img
+                    style={{ height: "200px" }}
+                    src={image.thumbUrl}
+                    alt=""
+                  />
+                </div>
+              ))}
           </div>
         </Form>
       </Modal.Body>

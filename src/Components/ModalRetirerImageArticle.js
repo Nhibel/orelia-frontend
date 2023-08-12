@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Modal } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import ArticleService from "../services/article.service";
 
@@ -22,7 +21,7 @@ export default function ModalRetirerImageArticle({
 
   const handleImageSelect = (e) => {
     if (e.target.checked) {
-      let newArr = imagesSelected;
+      const newArr = imagesSelected;
       newArr.push(e.target.id);
       setImagesSelected(newArr);
     } else {
@@ -43,26 +42,20 @@ export default function ModalRetirerImageArticle({
       <Modal.Body>
         <Form>
           <div className="d-flex flex-row flex-wrap justify-content-around">
-            {articleImages.map((image, index) => {
-              return (
-                <div key={index} className="p-2">
-                  <Form.Check
-                    type="checkbox"
-                    onChange={(e) => handleImageSelect(e)}
-                    id={image.idImage}
-                    style={{
-                      position: "absolute",
-                      marginLeft: "2px",
-                    }}
-                  ></Form.Check>
-                  <img
-                    style={{ height: "200px" }}
-                    src={image.thumbUrl}
-                    alt=""
-                  />
-                </div>
-              );
-            })}
+            {articleImages.map((image) => (
+              <div key={image.idImage} className="p-2">
+                <Form.Check
+                  type="checkbox"
+                  onChange={(e) => handleImageSelect(e)}
+                  id={image.idImage}
+                  style={{
+                    position: "absolute",
+                    marginLeft: "2px",
+                  }}
+                />
+                <img style={{ height: "200px" }} src={image.thumbUrl} alt="" />
+              </div>
+            ))}
           </div>
         </Form>
       </Modal.Body>

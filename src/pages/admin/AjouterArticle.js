@@ -7,39 +7,34 @@ import ArticleService from "../../services/article.service";
 
 export default function AjouterArticle() {
   const [article, setArticle] = useState();
-  const [isLoading, setLoading] = useState(false);
 
   const handleTitleChange = (e) => {
-    setArticle((article) => ({
-      ...article,
+    setArticle((prevArticle) => ({
+      ...prevArticle,
       title: e.target.value,
     }));
   };
 
   const handleContentChange = (e) => {
-    setArticle((article) => ({
-      ...article,
+    setArticle((prevArticle) => ({
+      ...prevArticle,
       richText: e.target.value,
     }));
   };
 
   const handleSectionChange = (e) => {
-    setArticle((article) => ({
-      ...article,
+    setArticle((prevArticle) => ({
+      ...prevArticle,
       section: e.target.value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    ArticleService.creerArticle(article).then((res) => {
+    ArticleService.creerArticle(article).then(() => {
       // TODO ajouter action
     });
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="contenu">

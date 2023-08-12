@@ -12,7 +12,6 @@ export default class UploadFiles extends Component {
       selectedFiles: undefined,
       progressInfos: [],
       message: [],
-      fileInfos: [],
     };
   }
 
@@ -24,21 +23,21 @@ export default class UploadFiles extends Component {
   }
 
   upload(idx, file) {
-    let _progressInfos = [...this.state.progressInfos];
+    const { progressInfos } = this.state;
 
     UploadService.upload(file, (event) => {
-      _progressInfos[idx].percentage = Math.round(
+      progressInfos[idx].percentage = Math.round(
         (100 * event.loaded) / event.total
       );
       this.setState({
-        _progressInfos,
+        progressInfos,
       });
     })
-      .then((response) => {
+      .then(() => {
         this.setState((prev) => {
-          let nextMessage = [
+          const nextMessage = [
             ...prev.message,
-            "Sauvegarde de l'image réussie : " + file.name,
+            `Sauvegarde de l'image réussie : ${file.name}`,
           ];
           return {
             message: nextMessage,
@@ -46,17 +45,18 @@ export default class UploadFiles extends Component {
         });
       })
       .then(() => {
-        this.props.childToParent("OK");
+        const { childToParent } = this.props;
+        childToParent("OK");
       })
       .catch(() => {
-        _progressInfos[idx].percentage = 0;
+        progressInfos[idx].percentage = 0;
         this.setState((prev) => {
-          let nextMessage = [
+          const nextMessage = [
             ...prev.message,
-            "Erreur lors de la sauvegarde de l'image : " + file.name,
+            `Erreur lors de la sauvegarde de l'image : ${file.name}`,
           ];
           return {
-            progressInfos: _progressInfos,
+            progressInfos,
             message: nextMessage,
           };
         });
@@ -64,34 +64,34 @@ export default class UploadFiles extends Component {
   }
 
   uploadFiles() {
-    const selectedFiles = this.state.selectedFiles;
+    const { selectedFiles } = this.state;
 
-    let _progressInfos = [];
-
-    for (let i = 0; i < selectedFiles.length; i++) {
-      _progressInfos.push({ percentage: 0, fileName: selectedFiles[i].name });
-    }
+    const progressInfos = selectedFiles.map((selectedFile) => ({
+      percentage: 0,
+      fileName: selectedFile.name,
+    }));
 
     this.setState(
       {
-        progressInfos: _progressInfos,
+        progressInfos,
         message: [],
       },
       () => {
-        for (let i = 0; i < selectedFiles.length; i++) {
-          this.upload(i, selectedFiles[i]);
-        }
+        selectedFiles.forEach((file, i) => {
+          this.upload(i, file);
+        });
       }
     );
   }
 
   render() {
-    const { selectedFiles, progressInfos, message, fileInfos } = this.state;
+    const { selectedFiles, progressInfos, message } = this.state;
 
     return (
       <div>
         {progressInfos &&
           progressInfos.map((progressInfo, index) => (
+            // eslint-disable-next-line react/no-array-index-key
             <div className="mb-2" key={index}>
               <span>{progressInfo.fileName}</span>
               <div className="progress">
@@ -101,7 +101,7 @@ export default class UploadFiles extends Component {
                   aria-valuenow={progressInfo.percentage}
                   aria-valuemin="0"
                   aria-valuemax="100"
-                  style={{ width: progressInfo.percentage + "%" }}
+                  style={{ width: `${progressInfo.percentage}%` }}
                 >
                   {progressInfo.percentage}%
                 </div>
@@ -121,6 +121,7 @@ export default class UploadFiles extends Component {
               className="btn btn-success btn-sm"
               disabled={!selectedFiles}
               onClick={this.uploadFiles}
+              type="button"
             >
               Upload
             </button>
@@ -130,9 +131,10 @@ export default class UploadFiles extends Component {
         {message.length > 0 && (
           <div className="alert alert-secondary" role="alert">
             <ul>
-              {message.map((item, i) => {
-                return <li key={i}>{item}</li>;
-              })}
+              {message.map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <li key={i}>{item}</li>
+              ))}
             </ul>
           </div>
         )}

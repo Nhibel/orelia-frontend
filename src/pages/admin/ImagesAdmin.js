@@ -1,17 +1,22 @@
-import { useState, useEffect } from "react";
-import UploadFiles from "../../Components/upload-files.component";
+import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import AuthService from "../../services/auth.service";
+import toast from "react-hot-toast";
+import UploadFiles from "../../Components/upload-files.component";
 import ImageService from "../../services/image.service";
 
 export default function ImagesAdmin() {
-  const [showPage, setShowPage] = useState(false);
   const [images, setImages] = useState();
 
   // Afficher Modal
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const getImages = async () => {
+    await ImageService.getImages().then((res) => {
+      setImages(res.data.data);
+    });
+  };
 
   const childToParent = (reload) => {
     if (reload === "OK") {
@@ -20,25 +25,19 @@ export default function ImagesAdmin() {
     }
   };
 
-  const getImages = async () => {
-    await ImageService.getImages().then((res) => {
-      setImages(res.data.data);
-    });
-  };
-
   const deleteImage = (filename) => {
-    ImageService.deleteImageByFilename(filename).then((response) => {
-      response = "OK" ? getImages() : alert("error");
-    });
+    ImageService.deleteImageByFilename(filename)
+      .then((response) => {
+        if (response === "OK") {
+          getImages();
+        } else {
+          toast.error("Erreur lors de la suppression de l'image");
+        }
+      })
+      .catch((error) => {
+        toast.error(`Erreur lors de la suppression de l'image : ${error}`);
+      });
   };
-
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user != null) {
-      setShowPage(true);
-    }
-    getImages();
-  }, []);
 
   return (
     <div className="contenu">
@@ -62,8 +61,12 @@ export default function ImagesAdmin() {
 
       <div className="d-flex flex-wrap justify-content-around">
         {images &&
-          images.map((image, index) => (
-            <div className="card m-2" style={{ width: "15rem" }} key={index}>
+          images.map((image) => (
+            <div
+              className="card m-2"
+              style={{ width: "15rem" }}
+              key={images.idImage}
+            >
               <img
                 className="card-img-top"
                 src={image.thumbUrl}

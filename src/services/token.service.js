@@ -1,22 +1,30 @@
 const getLocalRefreshToken = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  return user?.refreshToken;
+
+  if (user !== null) {
+    return user.refreshToken;
+  }
+
+  return null;
 };
 
 const getLocalAccessToken = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  return user?.accessToken;
+
+  if (user !== null) {
+    return user.accessToken;
+  }
+
+  return null;
 };
 
 const updateLocalAccessToken = (token) => {
-  let user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
   user.accessToken = token;
   localStorage.setItem("user", JSON.stringify(user));
 };
 
-const getUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
-};
+const getUser = () => JSON.parse(localStorage.getItem("user"));
 
 const setUser = (user) => {
   localStorage.setItem("user", JSON.stringify(user));

@@ -2,7 +2,7 @@ import axios from "axios";
 import TokenService from "./token.service";
 
 const instance = axios.create({
-  baseURL: "https://aureliabzf-backend.herokuapp.com/",
+  baseURL: "http://localhost:8080/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -11,39 +11,40 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const token = TokenService.getLocalAccessToken();
+    const newConfig = { ...config };
     if (token) {
-      config.headers["Authorization"] = "Bearer " + token; // for Spring Boot back-end
+      newConfig.headers.Authorization = `Bearer ${token}`; // for Spring Boot back-end
     }
-    return config;
+    return newConfig;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 instance.interceptors.response.use(
-  (res) => {
-    return res;
-  },
+  (res) => res,
   async (err) => {
-    const originalConfig = err.config;
+    if (err && err.config) {
+      const originalConfig = err.config;
 
-    if (originalConfig.url !== "/auth/signin" && err.response) {
-      // Access Token was expired
-      if (err.response.status === 401 && !originalConfig._retry) {
-        originalConfig._retry = true;
+      if (originalConfig.url !== "/auth/signin" && err.response) {
+        // Access Token was expired
+        // eslint-disable-next-line no-underscore-dangle
+        if (err.response.status === 401 && !originalConfig._retry) {
+          // eslint-disable-next-line no-underscore-dangle
+          originalConfig._retry = true;
 
-        try {
-          const rs = await instance.post("/auth/refreshtoken", {
-            refreshToken: TokenService.getLocalRefreshToken(),
-          });
+          try {
+            const rs = await instance.post("/auth/refreshtoken", {
+              refreshToken: TokenService.getLocalRefreshToken(),
+            });
 
-          const { accessToken } = rs.data;
-          TokenService.updateLocalAccessToken(accessToken);
+            const { accessToken } = rs.data;
+            TokenService.updateLocalAccessToken(accessToken);
 
-          return instance(originalConfig);
-        } catch (_error) {
-          return Promise.reject(_error);
+            return instance(originalConfig);
+          } catch (_error) {
+            return Promise.reject(_error);
+          }
         }
       }
     }

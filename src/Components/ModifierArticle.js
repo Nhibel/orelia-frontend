@@ -1,14 +1,13 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import ArticleService from "../services/article.service";
-import ModalAjouterImageArticle from "../Components/ModalAjouterImageArticle";
-import ModalRetirerImageArticle from "../Components/ModalRetirerImageArticle";
-import toast, { Toaster } from "react-hot-toast";
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Card } from "react-bootstrap";
+import ArticleService from "../services/article.service";
+import ModalAjouterImageArticle from "./ModalAjouterImageArticle";
+import ModalRetirerImageArticle from "./ModalRetirerImageArticle";
 
 export default function ModifierArticle({ slug }) {
   const [article, setArticle] = useState();
@@ -21,10 +20,6 @@ export default function ModifierArticle({ slug }) {
   const [openModalRetirerImageArticle, setOpenModalRetirerImageArticle] =
     useState(false);
 
-  useEffect(() => {
-    loadArticle();
-  }, []);
-
   const loadArticle = () => {
     ArticleService.getArticlesBySectionName(slug).then((res) => {
       setArticle(res.data.data);
@@ -32,6 +27,10 @@ export default function ModifierArticle({ slug }) {
       setLoading(false);
     });
   };
+
+  useEffect(() => {
+    loadArticle();
+  }, []);
 
   const reLoadArticle = async () => {
     await ArticleService.getArticlesBySectionName(slug).then((res) => {
@@ -47,7 +46,7 @@ export default function ModifierArticle({ slug }) {
         toast.success("Article mis à jour avec succès !");
         setArticle(res.data.data);
       })
-      .catch(function (error) {
+      .catch((error) => {
         if (error.response) {
           toast.error("Erreur lors de la mise à jour de l'article");
         }
@@ -55,21 +54,21 @@ export default function ModifierArticle({ slug }) {
   };
 
   const handleTitleChange = (e) => {
-    setArticle((article) => ({
-      ...article,
+    setArticle((prevArticle) => ({
+      ...prevArticle,
       title: e.target.value,
     }));
   };
 
   const handleContentChange = (e) => {
-    setArticle((article) => ({
-      ...article,
+    setArticle((prevArticle) => ({
+      ...prevArticle,
       richText: e.target.value,
     }));
   };
 
   const handleRemoveImage = async (idImage) => {
-    let newArr = [idImage];
+    const newArr = [idImage];
     await ArticleService.removeImageArticle(article.idArticle, newArr);
     reLoadArticle();
   };
@@ -177,9 +176,9 @@ export default function ModifierArticle({ slug }) {
                     <Row xs={2} md={4} style={{ width: "100%" }}>
                       {[...article.images]
                         .sort((a, b) => a.name.localeCompare(b.name))
-                        .map((image, index) => (
-                          <Col className="m-2">
-                            <Card key={index}>
+                        .map((image) => (
+                          <Col className="m-2" key={image.idImage}>
+                            <Card key={image.idImage}>
                               <Card.Img
                                 variant="top"
                                 src={image.thumbUrl}

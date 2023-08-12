@@ -3,15 +3,14 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import ModalAjouterImage from "../../Components/ModalAjouterImage";
 import { Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import ModalAjouterImage from "../../Components/ModalAjouterImage";
 import ProjetService from "../../services/projet.service";
 import ImageService from "../../services/image.service";
-import { useNavigate } from "react-router-dom";
 
 export default function AjouterProjet() {
   const [projet, setProjet] = useState();
-  const [isLoading, setLoading] = useState(false);
   const [openModalAjoutImage, setOpenModalAjoutImage] = useState(false);
   const [selectionImages, setSelectionImage] = useState([]);
   const [selectionImageToShow, setSelectionImageToShow] = useState([]);
@@ -22,15 +21,15 @@ export default function AjouterProjet() {
 
   const optionSelect = ["Illustration", "Graphisme", "Maquette"];
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (images) {
       const compareIdImages = images.filter((image) =>
         selectionImages.includes(image.idImage.toString())
       );
-      setProjet((projet) => ({
-        ...projet,
+      setProjet((prevProjet) => ({
+        ...prevProjet,
         images: compareIdImages,
       }));
       setSelectionImageToShow(compareIdImages);
@@ -39,29 +38,29 @@ export default function AjouterProjet() {
   }, [images]);
 
   const handleTitleChange = (e) => {
-    setProjet((projet) => ({
-      ...projet,
+    setProjet((prevProjet) => ({
+      ...prevProjet,
       title: e.target.value,
     }));
   };
 
   const handleTypeSelect = (e) => {
-    setProjet((projet) => ({
-      ...projet,
+    setProjet((prevProjet) => ({
+      ...prevProjet,
       type: e.target.value,
     }));
   };
 
   const handleContentChange = (e) => {
-    setProjet((projet) => ({
-      ...projet,
+    setProjet((prevProjet) => ({
+      ...prevProjet,
       richText: e.target.value,
     }));
   };
 
   const handleImageEnValeur = (idImage) => {
-    setProjet((projet) => ({
-      ...projet,
+    setProjet((prevProjet) => ({
+      ...prevProjet,
       idImageThumbnail: idImage,
     }));
   };
@@ -70,8 +69,8 @@ export default function AjouterProjet() {
     const arrCopy = Array.from(projet.images);
     const objWithIdIndex = arrCopy.findIndex((obj) => obj.idImage === idImage);
     arrCopy.splice(objWithIdIndex, 1);
-    setProjet((projet) => ({
-      ...projet,
+    setProjet((prevProjet) => ({
+      ...prevProjet,
       images: arrCopy,
     }));
     setSelectionImageToShow(arrCopy);
@@ -96,10 +95,6 @@ export default function AjouterProjet() {
     getImages();
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="contenu">
       <Button
@@ -115,10 +110,7 @@ export default function AjouterProjet() {
         <ModalAjouterImage
           closeModal={setOpenModalAjoutImage}
           show={openModalAjoutImage}
-          //idProjet={projet.id}
-          //reloadImagesFunc={reLoadProjet}
-          //projetImages={projet.images}
-          type={"creation"}
+          type="creation"
           selectionImage={setSelectionImage}
           updateImagesFunc={updateSelectedImages}
         />
@@ -159,8 +151,8 @@ export default function AjouterProjet() {
                     <option key="blankChoice" hidden value>
                       Choisir le type de projet
                     </option>
-                    {optionSelect.map((option, index) => (
-                      <option value={option} key={index}>
+                    {optionSelect.map((option) => (
+                      <option value={option} key={option}>
                         {option}
                       </option>
                     ))}
@@ -196,11 +188,11 @@ export default function AjouterProjet() {
                     className="g-2 pt-2 d-flex flex-row flex-wrap overflow-auto"
                     key={key}
                   >
-                    {selectionImageToShow != "" ? (
+                    {selectionImageToShow !== "" ? (
                       [...selectionImageToShow]
                         .sort((a, b) => a.name.localeCompare(b.name))
-                        .map((image, index) => (
-                          <Col className="m-2" key={index} md={3}>
+                        .map((image) => (
+                          <Col className="m-2" key={image.idImage} md={3}>
                             <Card style={{ width: "100%" }}>
                               <Card.Img
                                 variant="top"

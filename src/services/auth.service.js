@@ -1,16 +1,15 @@
 import api from "./api";
 import TokenService from "./token.service";
 
-const register = (username, email, password) => {
-  return api.post("/auth/signup", {
+const register = (username, email, password) =>
+  api.post("/auth/signup", {
     username,
     email,
     password,
   });
-};
 
-const login = (username, password) => {
-  return api
+const login = (username, password) =>
+  api
     .post("/auth/signin", {
       username,
       password,
@@ -22,15 +21,12 @@ const login = (username, password) => {
 
       return response.data;
     });
-};
 
 const logout = () => {
   TokenService.removeUser();
 };
 
-const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
-};
+const getCurrentUser = () => JSON.parse(localStorage.getItem("user"));
 
 const AuthService = {
   register,

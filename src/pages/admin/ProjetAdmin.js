@@ -4,10 +4,10 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import ModalAjouterImage from "../../Components/ModalAjouterImage";
-import ModalRetirerImage from "../../Components/ModalRetirerImages";
 import { Card } from "react-bootstrap";
 import toast from "react-hot-toast";
+import ModalAjouterImage from "../../Components/ModalAjouterImage";
+import ModalRetirerImage from "../../Components/ModalRetirerImages";
 import ProjetService from "../../services/projet.service";
 
 export default function ProjetAdmin() {
@@ -27,10 +27,6 @@ export default function ProjetAdmin() {
 
   const optionSelect = ["Illustration", "Graphisme", "Maquette"];
 
-  useEffect(() => {
-    loadProjet();
-  }, []);
-
   const loadProjet = () => {
     ProjetService.getProjetById(slug).then((res) => {
       setProjet(res.data.data);
@@ -38,6 +34,10 @@ export default function ProjetAdmin() {
       setLoading(false);
     });
   };
+
+  useEffect(() => {
+    loadProjet();
+  }, []);
 
   const reLoadProjet = async () => {
     await ProjetService.getProjetById(slug).then((res) => {
@@ -47,22 +47,22 @@ export default function ProjetAdmin() {
   };
 
   const handleTitleChange = (e) => {
-    setProjet((projet) => ({
-      ...projet,
+    setProjet((prevProjet) => ({
+      ...prevProjet,
       title: e.target.value,
     }));
   };
 
   const handleTypeSelect = (e) => {
-    setProjet((projet) => ({
-      ...projet,
+    setProjet((prevProjet) => ({
+      ...prevProjet,
       type: e.target.value,
     }));
   };
 
   const handleContentChange = (e) => {
-    setProjet((projet) => ({
-      ...projet,
+    setProjet((prevProjet) => ({
+      ...prevProjet,
       richText: e.target.value,
     }));
   };
@@ -73,7 +73,7 @@ export default function ProjetAdmin() {
         setProjet(res.data.data);
         toast.success("Image mise en valeur avec succès !");
       })
-      .catch(function (error) {
+      .catch((error) => {
         if (error.response) {
           if (error.response.data.statusCode === 403) {
             toast.error("Token expiré, veuillez-vous reconnecter.");
@@ -92,7 +92,7 @@ export default function ProjetAdmin() {
         toast.success("Projet mis à jour avec succès !");
         setProjet(res.data.data);
       })
-      .catch(function (error) {
+      .catch((error) => {
         if (error.response) {
           if (error.response.data.statusCode === 403) {
             toast.error(
@@ -107,7 +107,7 @@ export default function ProjetAdmin() {
   };
 
   const handleRemoveImage = async (idImage) => {
-    let newArr = [idImage];
+    const newArr = [idImage];
     await ProjetService.removeImageProjet(projet.id, newArr);
     reLoadProjet();
   };
@@ -191,8 +191,8 @@ export default function ProjetAdmin() {
                     }}
                     value={projet.type}
                   >
-                    {optionSelect.map((option, index) => (
-                      <option value={option} key={index}>
+                    {optionSelect.map((option) => (
+                      <option value={option} key={option}>
                         {option}
                       </option>
                     ))}
@@ -234,9 +234,9 @@ export default function ProjetAdmin() {
                     >
                       {[...projet.images]
                         .sort((a, b) => a.name.localeCompare(b.name))
-                        .map((image, index) => (
+                        .map((image) => (
                           <Col className="m-2" key={image.idImage}>
-                            <Card key={index}>
+                            <Card key={image.idImage}>
                               <Card.Img
                                 variant="top"
                                 src={image.thumbUrl}

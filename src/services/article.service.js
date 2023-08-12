@@ -1,28 +1,19 @@
 import api from "./api";
 
-const getArticlesBySectionName = (sectionName) => {
-  return api.get(`/articles/section/${sectionName}`);
-};
+const getArticlesBySectionName = (sectionName) =>
+  api.get(`/articles/section/${sectionName}`);
 
-const getArticles = () => {
-  return api.get(`/articles/`);
-};
+const getArticles = () => api.get(`/articles/`);
 
-const ajouterImagesArticle = (idArticle, selectionImages) => {
-  return api.put(`/articles/${idArticle}/images`, selectionImages);
-};
+const ajouterImagesArticle = (idArticle, selectionImages) =>
+  api.put(`/articles/${idArticle}/images`, selectionImages);
 
-const creerArticle = (article) => {
-  return api.post(`/articles/`, article);
-};
+const creerArticle = (article) => api.post(`/articles/`, article);
 
-const updateArticle = (article) => {
-  return api.put(`/articles/`, article);
-};
+const updateArticle = (article) => api.put(`/articles/`, article);
 
-const removeImageArticle = (idArticle, arrIdImage) => {
-  return api.put(`/articles/${idArticle}/remove/images`, arrIdImage);
-};
+const removeImageArticle = (idArticle, arrIdImage) =>
+  api.put(`/articles/${idArticle}/remove/images`, arrIdImage);
 
 const ArticleService = {
   getArticlesBySectionName,

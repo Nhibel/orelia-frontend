@@ -1,9 +1,9 @@
 // articleProvider.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ArticleService from "../services/article.service";
 import ArticleContext from "./articleContext";
 
-const ArticleProvider = ({ children }) => {
+function ArticleProvider({ children }) {
   const [article, setArticle] = useState(null);
 
   useEffect(() => {
@@ -15,10 +15,15 @@ const ArticleProvider = ({ children }) => {
     fetchArticle();
   }, []);
 
+  const contextValue = useMemo(
+    () => ({ article, setArticle }),
+    [article, setArticle]
+  );
+
   return (
-    <ArticleContext.Provider value={{ article, setArticle }}>
+    <ArticleContext.Provider value={contextValue}>
       {children}
     </ArticleContext.Provider>
   );
-};
+}
 export default ArticleProvider;

@@ -1,6 +1,7 @@
 import React from "react";
 import AuthService from "../services/auth.service";
-const Profile = () => {
+
+function Profile() {
   const currentUser = AuthService.getCurrentUser();
   return (
     <div className="container">
@@ -22,9 +23,10 @@ const Profile = () => {
       <strong>Authorities:</strong>
       <ul>
         {currentUser.roles &&
+          // eslint-disable-next-line react/no-array-index-key
           currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
       </ul>
     </div>
   );
-};
+}
 export default Profile;

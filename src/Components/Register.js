@@ -4,6 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import AuthService from "../services/auth.service";
+
 const required = (value) => {
   if (!value) {
     return (
@@ -12,7 +13,9 @@ const required = (value) => {
       </div>
     );
   }
+  return null;
 };
+
 const validEmail = (value) => {
   if (!isEmail(value)) {
     return (
@@ -21,7 +24,9 @@ const validEmail = (value) => {
       </div>
     );
   }
+  return null;
 };
+
 const vusername = (value) => {
   if (value.length < 3 || value.length > 20) {
     return (
@@ -30,7 +35,9 @@ const vusername = (value) => {
       </div>
     );
   }
+  return null;
 };
+
 const vpassword = (value) => {
   if (value.length < 6 || value.length > 40) {
     return (
@@ -39,8 +46,10 @@ const vpassword = (value) => {
       </div>
     );
   }
+  return null;
 };
-const Register = () => {
+
+function Register() {
   const form = useRef();
   const checkBtn = useRef();
   const [username, setUsername] = useState("");
@@ -49,22 +58,23 @@ const Register = () => {
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
   const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
+    const newUsername = e.target.value;
+    setUsername(newUsername);
   };
   const onChangeEmail = (e) => {
-    const email = e.target.value;
-    setEmail(email);
+    const newEmail = e.target.value;
+    setEmail(newEmail);
   };
   const onChangePassword = (e) => {
-    const password = e.target.value;
-    setPassword(password);
+    const newPassword = e.target.value;
+    setPassword(newPassword);
   };
   const handleRegister = (e) => {
     e.preventDefault();
     setMessage("");
     setSuccessful(false);
     form.current.validateAll();
+    // eslint-disable-next-line no-underscore-dangle
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.register(username, email, password).then(
         (response) => {
@@ -129,7 +139,9 @@ const Register = () => {
                 />
               </div>
               <div className="form-group">
-                <button className="btn btn-primary btn-block">Sign Up</button>
+                <button type="submit" className="btn btn-primary btn-block">
+                  Sign Up
+                </button>
               </div>
             </div>
           )}
@@ -150,5 +162,5 @@ const Register = () => {
       </div>
     </div>
   );
-};
+}
 export default Register;

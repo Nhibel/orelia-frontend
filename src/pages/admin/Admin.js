@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Row, Modal } from "react-bootstrap";
+import toast from "react-hot-toast";
 import ProjetService from "../../services/projet.service";
 import ArticleService from "../../services/article.service";
-import toast, { Toaster } from "react-hot-toast";
 
 export default function Admin() {
   const [projets, setProjets] = useState([]);
@@ -13,7 +13,6 @@ export default function Admin() {
   // Afficher Modal
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [modalInfo, setModalInfo] = useState();
 
   // Permet de mettre à jour la sélection d'image
@@ -22,7 +21,6 @@ export default function Admin() {
   useEffect(() => {
     ProjetService.getProjets().then((res) => {
       setProjets(res.data.data);
-      console.log(res.data.data);
     });
     ArticleService.getArticles().then((res) => {
       setArticles(res.data.data);
@@ -56,7 +54,7 @@ export default function Admin() {
   };
 
   const openModalSupprimerProjet = (idProjet, title) => {
-    setModalInfo({ idProjet: idProjet, title: title });
+    setModalInfo({ idProjet, title });
     setShow(true);
   };
 
@@ -117,13 +115,13 @@ export default function Admin() {
                   className="d-flex justify-content-between p-2 border"
                   key={article.idArticle}
                 >
-                  <div
+                  <button
+                    type="button"
                     className="mr-auto p-1"
                     onClick={() => navigateToArticle(article.section)}
-                    style={{ cursor: "pointer" }}
                   >
                     {article.section}
-                  </div>
+                  </button>
                 </div>
               ))}
             </Card>
@@ -138,13 +136,14 @@ export default function Admin() {
                     className="d-flex justify-content-between p-2 border"
                     key={projet.id}
                   >
-                    <div
+                    <button
+                      type="button"
                       className="mr-auto p-1"
                       onClick={() => navigateToProject(projet.id)}
                       style={{ cursor: "pointer" }}
                     >
                       {projet.title}
-                    </div>
+                    </button>
                     <div>
                       <Button
                         variant="danger"

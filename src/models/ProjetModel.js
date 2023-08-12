@@ -1,5 +1,4 @@
 import React from "react";
-import { ImageModel } from "./ImageModel";
 
 export class ProjetModel extends React.Component {
   constructor(id, title, richText, images, type) {

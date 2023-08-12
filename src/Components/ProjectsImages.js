@@ -1,33 +1,47 @@
-import { useInView } from "react-intersection-observer";
+import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import React, { useEffect, useRef } from "react";
 import { InView } from "react-intersection-observer";
 
-const ProjectsImages = (props) => {
+function ProjectsImages(props) {
   const { image, projet, navigateToProject, handleImageLoaded } = props;
 
   const imgRef = useRef();
 
+  const handleKeyDown = useCallback(
+    (event) => {
+      if (event.key === "Enter") {
+        navigateToProject(projet.id, projet);
+      }
+    },
+    [navigateToProject, projet]
+  );
+
   return (
     <InView triggerOnce={false}>
-      {({ inView, ref, entry }) => (
+      {({ inView, ref }) => (
         <motion.div
           layout
           initial={{ opacity: 0 }}
-          animate={{
-            opacity: inView ? 1 : 0,
-          }}
-          transition={{ duration: 1 }} // Adjust as needed
+          animate={{ opacity: inView ? 1 : 0 }}
+          transition={{ duration: 1 }}
           exit={{ opacity: 0 }}
           key={image.idImage}
         >
           <div
             ref={ref}
             style={{ cursor: "pointer" }}
+            role="button"
+            tabIndex="0"
             onClick={() => navigateToProject(projet.id, projet)}
+            onKeyDown={handleKeyDown}
           >
             <figure className="fig-hover-effect">
-              <img ref={imgRef} src={image.url} onLoad={handleImageLoaded} />
+              <img
+                ref={imgRef}
+                src={image.url}
+                onLoad={handleImageLoaded}
+                alt={image.name}
+              />
               <figcaption>
                 <h2 style={{ fontWeight: "300" }}>{projet.title}</h2>
                 <p style={{ fontSize: "20px", fontWeight: "700" }}>
@@ -40,5 +54,6 @@ const ProjectsImages = (props) => {
       )}
     </InView>
   );
-};
+}
+
 export default ProjectsImages;

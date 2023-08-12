@@ -1,15 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import toast from "react-hot-toast";
+import { Button } from "react-bootstrap";
 import ArticleService from "../services/article.service";
 import ImageService from "../services/image.service";
-import { Button } from "react-bootstrap";
-import toast, { Toaster } from "react-hot-toast";
 
 export default function ModifierArticleAbout({ slug }) {
   const [article, setArticle] = useState();
   const [articleToSave, setArticleToSave] = useState();
   const [isLoading, setLoading] = useState(true);
-  const [title, setTitle] = useState();
   const [gallery, setGallery] = useState([]);
   const [tinyGallery, setTinyGallery] = useState([]);
 
@@ -17,7 +16,6 @@ export default function ModifierArticleAbout({ slug }) {
     ArticleService.getArticlesBySectionName(slug).then((res) => {
       setArticle(res.data.data);
       setArticleToSave(res.data.data);
-      setTitle(res.data.data.title);
     });
 
     ImageService.getImages().then((res) => {
@@ -26,9 +24,9 @@ export default function ModifierArticleAbout({ slug }) {
   }, []);
 
   useEffect(() => {
-    let newArr = [];
+    const newArr = [];
     if (gallery) {
-      gallery.map((image) => {
+      gallery.forEach((image) => {
         newArr.push({ title: image.name, value: image.thumbUrl });
       });
     }
@@ -37,30 +35,32 @@ export default function ModifierArticleAbout({ slug }) {
   }, [gallery]);
 
   useEffect(() => {
-    if (articleToSave != article) {
-      ArticleService.updateArticle(articleToSave).then(
+    if (articleToSave !== article) {
+      ArticleService.updateArticle(articleToSave).then(() =>
         toast.success("Article mis à jour avec succès !")
       );
     }
   }, [articleToSave]);
 
   const saveText = (richText) => {
-    setArticleToSave((article) => ({
-      ...article,
-      richText: richText,
+    setArticleToSave((prevArticle) => ({
+      ...prevArticle,
+      richText,
     }));
   };
 
   const editorRef = useRef(null);
 
   return (
-    <>
+    <div>
       {!isLoading && tinyGallery.length && (
         <div className="d-flex justify-content-center">
           <div style={{ width: "75%" }}>
             <Editor
               apiKey="9pnpqm0jtajw64w1slmwlb8dtx6lytstsn55qcxwzy191hkr"
-              onInit={(evt, editor) => (editorRef.current = editor)}
+              onInit={(editor) => {
+                editorRef.current = editor;
+              }}
               initialValue={article.richText}
               init={{
                 image_list: tinyGallery,
@@ -105,6 +105,6 @@ export default function ModifierArticleAbout({ slug }) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

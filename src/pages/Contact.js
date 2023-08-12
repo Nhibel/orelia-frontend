@@ -16,6 +16,18 @@ export default function Contact() {
   const [formData, updateFormData] = useState(initialFormData);
   const [validated, setValidated] = useState(false);
 
+  const sendFeedback = (serviceID, templateId, variables, publicKey) => {
+    emailjs
+      .send(serviceID, templateId, variables, publicKey)
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Votre message a bien été envoyé",
+        });
+      })
+      .catch((err) => console.error("Houston, on a un problème : ", err));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -42,18 +54,6 @@ export default function Contact() {
     setValidated(true);
   };
 
-  const sendFeedback = (serviceID, templateId, variables, publicKey) => {
-    emailjs
-      .send(serviceID, templateId, variables, publicKey)
-      .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Votre message a bien été envoyé",
-        });
-      })
-      .catch((err) => console.error("Houston, on a un problème : ", err));
-  };
-
   const handleChange = (e) => {
     updateFormData({
       ...formData,
@@ -62,87 +62,85 @@ export default function Contact() {
   };
 
   return (
-    <>
-      <AnimatePresence>
-        <motion.div
-          layout
-          initial={{ transform: "scale(0)" }}
-          animate={{ transform: "scale(1)" }}
-          exit={{ transform: "scale(0)" }}
-          className="contenu justify-content-center d-flex"
-        >
-          <div style={{ width: "50%" }}>
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
-              <Form.Group as={Col} controlId="formGridName" className="mb-2">
-                <Form.Label>
-                  Nom<span className="required"> *</span>
-                </Form.Label>
-                <Form.Control
-                  required
-                  name="name"
-                  type="text"
-                  placeholder="Votre nom..."
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Veuillez renseigner votre nom
-                </Form.Control.Feedback>
-              </Form.Group>
+    <AnimatePresence>
+      <motion.div
+        layout
+        initial={{ transform: "scale(0)" }}
+        animate={{ transform: "scale(1)" }}
+        exit={{ transform: "scale(0)" }}
+        className="contenu justify-content-center d-flex"
+      >
+        <div style={{ width: "50%" }}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form.Group as={Col} controlId="formGridName" className="mb-2">
+              <Form.Label>
+                Nom<span className="required"> *</span>
+              </Form.Label>
+              <Form.Control
+                required
+                name="name"
+                type="text"
+                placeholder="Votre nom..."
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Veuillez renseigner votre nom
+              </Form.Control.Feedback>
+            </Form.Group>
 
-              <Form.Group as={Col} controlId="formGridEmail" className="mb-2">
-                <Form.Label>
-                  Email<span className="required"> *</span>
-                </Form.Label>
-                <Form.Control
-                  required
-                  name="email"
-                  type="email"
-                  placeholder="Votre email..."
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Veuillez renseigner votre email
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group as={Col} controlId="formGridMobile" className="mb-2">
-                <Form.Label>
-                  Téléphone<span className="required"> *</span>
-                </Form.Label>
-                <Form.Control
-                  required
-                  name="mobile"
-                  placeholder="Votre téléphone..."
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Veuillez renseigner votre téléphone
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group as={Col} id="formGridQuery" className="mb-2">
-                <Form.Label>
-                  Message<span className="required"> *</span>
-                </Form.Label>
-                <Form.Control
-                  required
-                  name="query"
-                  as="textarea"
-                  rows={3}
-                  onChange={handleChange}
-                  placeholder="Votre message..."
-                />
-                <Form.Control.Feedback type="invalid">
-                  Veuillez renseigner votre message
-                </Form.Control.Feedback>
-              </Form.Group>
-              <div className="mt-3 text-center">
-                <Button type="submit" className="rounded-pill">
-                  Envoyer
-                </Button>
-              </div>
-            </Form>
-          </div>
-        </motion.div>
-      </AnimatePresence>
-    </>
+            <Form.Group as={Col} controlId="formGridEmail" className="mb-2">
+              <Form.Label>
+                Email<span className="required"> *</span>
+              </Form.Label>
+              <Form.Control
+                required
+                name="email"
+                type="email"
+                placeholder="Votre email..."
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Veuillez renseigner votre email
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGridMobile" className="mb-2">
+              <Form.Label>
+                Téléphone<span className="required"> *</span>
+              </Form.Label>
+              <Form.Control
+                required
+                name="mobile"
+                placeholder="Votre téléphone..."
+                onChange={handleChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                Veuillez renseigner votre téléphone
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group as={Col} id="formGridQuery" className="mb-2">
+              <Form.Label>
+                Message<span className="required"> *</span>
+              </Form.Label>
+              <Form.Control
+                required
+                name="query"
+                as="textarea"
+                rows={3}
+                onChange={handleChange}
+                placeholder="Votre message..."
+              />
+              <Form.Control.Feedback type="invalid">
+                Veuillez renseigner votre message
+              </Form.Control.Feedback>
+            </Form.Group>
+            <div className="mt-3 text-center">
+              <Button type="submit" className="rounded-pill">
+                Envoyer
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
